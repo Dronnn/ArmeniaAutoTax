@@ -1,0 +1,176 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+/* Begin PBXBuildFile section */
+		B188BBD29EB44B63DA097307 /* ArmeniaAutoTaxApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE43E28035F9B0FA951B48D /* ArmeniaAutoTaxApp.swift */; };
+		90DE282ADFEE31E42820E9C1 /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B850770CCF6B9CDCECAC83F5 /* Vehicle.swift */; };
+		81D2EE715875ACA374007ECC /* TaxCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB45120BBD80CC6B24B79BF /* TaxCalculator.swift */; };
+		5DFD445F0C375CF196511869 /* TaxChartData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E4B2535D811828A3A55500 /* TaxChartData.swift */; };
+		C8470AAA7AEFF0D09558CD7B /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20F1881412E439B3AE600A4 /* Localization.swift */; };
+		9C79ACBF10876953D70F13C6 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E9E26989397B826BFD5EAE /* Formatting.swift */; };
+		63325062C19BE814CFBBB8A3 /* ExchangeRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D99D0356EC6B259F389396A /* ExchangeRates.swift */; };
+		44656AC9F55E4FF989A421F7 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1461CAA9FD52F627A3ACD303 /* AppStore.swift */; };
+		9DC20C19580804775FD82DA3 /* DonationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F45A5E3E4DA1569C8627E7F5 /* DonationStore.swift */; };
+		FF98B10B2D8802B615CD4CFF /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2BFF6CE53237C58E1DF14C /* DesignSystem.swift */; };
+		3DB0CC2798549CB80C4429D0 /* CalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1FA95ABAF1C52C16932731 /* CalculatorView.swift */; };
+		7F74127E5B8540EDBD041BF4 /* ConverterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5626BC4E5A70F7B5EDFF2D14 /* ConverterView.swift */; };
+		3C4C0C771903A5BF7685AE0F /* TaxChartsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8F55EC48B1C37945C94BD8 /* TaxChartsView.swift */; };
+		6A35D82572C03D4C1BC8DCA9 /* GarageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E54CB00D5F3E2DB716184966 /* GarageView.swift */; };
+		29CC76297E7BA93D3150F71E /* RulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC5B8BDE37108898D451215 /* RulesView.swift */; };
+		62F09DAA3A73F533C463BFB5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B24899CB69992BD6DD40380 /* SettingsView.swift */; };
+		23811F80824ACF9B65514942 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6D23516C7718D2E22285AA /* OnboardingView.swift */; };
+		A7B5D1A4581A983B3B753F8B /* DonationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2BAE668DCF206EE11265E34 /* DonationView.swift */; };
+		6FF8B1D05C3D85AFD31DA172 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0C299F368686D7C3AF7EE31B /* Assets.xcassets */; };
+		59170CD3D7D3E6CF9B26AADF /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B25F549097ABA935A4465DC3 /* Localizable.xcstrings */; };
+		EC825F05AA22D34DE49FB852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B60E15C52A07684856E14C7 /* LaunchScreen.storyboard */; };
+		08D4CFAECB6DA1C4B68E4536 /* TaxCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 868A1A434EFAA93945768AF7 /* TaxCalculationTests.swift */; };
+		852869DA51C3F996DBD6024F /* TaxCalculatorEdgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6B42101B0429173591B88D /* TaxCalculatorEdgeTests.swift */; };
+		B0CBCFABB18523C8CF4C55AF /* TaxChartDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5491F7FE702DFE91AF2065 /* TaxChartDataTests.swift */; };
+		C44F265C56988D2E58C7BD29 /* ExchangeRatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94AC592A91D7C8046D683CB /* ExchangeRatesTests.swift */; };
+		DB15704B6D0227C0C3ADB492 /* AppStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F636D03A890E0AD9578D458 /* AppStoreTests.swift */; };
+		C7F7200A1B0C23D3D02CDAEB /* FormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B1B247EE7B2E013A4BB57E9 /* FormattingTests.swift */; };
+		D0BA2AB02DC2F9A4EFF69C35 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6B8B5CB6FEF6FB621706E9 /* LocalizationTests.swift */; };
+		284D8751C13DDDA35AD41749 /* DonationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85A79D0AE820F810E7D023D /* DonationTests.swift */; };
+		91ACDDA489A0033D56506D27 /* ArmeniaAutoTax.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 6142F79CC4A1B9A3487E78D1 /* ArmeniaAutoTax.storekit */; };
+		9A23BA61E35F956F49BDEAC7 /* ArmeniaAutoTaxUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBE19BAD8ED47AAA620913D /* ArmeniaAutoTaxUITests.swift */; };
+/* End PBXBuildFile section */
+/* Begin PBXContainerItemProxy section */
+		0D7FDB17A812E0D6329D4B4A /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = EC553E7FBC3AD0AD7AB94BDF /* Project object */; proxyType = 1; remoteGlobalIDString = 8C1A045E96B998B40533C7FF; remoteInfo = ArmeniaAutoTax; };
+		F5E07E2EE921C07DC3BC6656 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = EC553E7FBC3AD0AD7AB94BDF /* Project object */; proxyType = 1; remoteGlobalIDString = 8C1A045E96B998B40533C7FF; remoteInfo = ArmeniaAutoTax; };
+/* End PBXContainerItemProxy section */
+/* Begin PBXFileReference section */
+		6AE43E28035F9B0FA951B48D /* ArmeniaAutoTaxApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArmeniaAutoTaxApp.swift; sourceTree = "<group>"; };
+		B850770CCF6B9CDCECAC83F5 /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
+		FDB45120BBD80CC6B24B79BF /* TaxCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxCalculator.swift; sourceTree = "<group>"; };
+		49E4B2535D811828A3A55500 /* TaxChartData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxChartData.swift; sourceTree = "<group>"; };
+		F20F1881412E439B3AE600A4 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		90E9E26989397B826BFD5EAE /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatting.swift; sourceTree = "<group>"; };
+		6D99D0356EC6B259F389396A /* ExchangeRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRates.swift; sourceTree = "<group>"; };
+		1461CAA9FD52F627A3ACD303 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		F45A5E3E4DA1569C8627E7F5 /* DonationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationStore.swift; sourceTree = "<group>"; };
+		BB2BFF6CE53237C58E1DF14C /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		3D1FA95ABAF1C52C16932731 /* CalculatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorView.swift; sourceTree = "<group>"; };
+		5626BC4E5A70F7B5EDFF2D14 /* ConverterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConverterView.swift; sourceTree = "<group>"; };
+		8A8F55EC48B1C37945C94BD8 /* TaxChartsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxChartsView.swift; sourceTree = "<group>"; };
+		E54CB00D5F3E2DB716184966 /* GarageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarageView.swift; sourceTree = "<group>"; };
+		9EC5B8BDE37108898D451215 /* RulesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesView.swift; sourceTree = "<group>"; };
+		1B24899CB69992BD6DD40380 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		6B6D23516C7718D2E22285AA /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		F2BAE668DCF206EE11265E34 /* DonationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationView.swift; sourceTree = "<group>"; };
+		868A1A434EFAA93945768AF7 /* TaxCalculationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxCalculationTests.swift; sourceTree = "<group>"; };
+		BE6B42101B0429173591B88D /* TaxCalculatorEdgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxCalculatorEdgeTests.swift; sourceTree = "<group>"; };
+		5D5491F7FE702DFE91AF2065 /* TaxChartDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxChartDataTests.swift; sourceTree = "<group>"; };
+		E94AC592A91D7C8046D683CB /* ExchangeRatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRatesTests.swift; sourceTree = "<group>"; };
+		6F636D03A890E0AD9578D458 /* AppStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreTests.swift; sourceTree = "<group>"; };
+		7B1B247EE7B2E013A4BB57E9 /* FormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingTests.swift; sourceTree = "<group>"; };
+		3A6B8B5CB6FEF6FB621706E9 /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
+		A85A79D0AE820F810E7D023D /* DonationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationTests.swift; sourceTree = "<group>"; };
+		3BBE19BAD8ED47AAA620913D /* ArmeniaAutoTaxUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArmeniaAutoTaxUITests.swift; sourceTree = "<group>"; };
+		0C299F368686D7C3AF7EE31B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B25F549097ABA935A4465DC3 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		9B60E15C52A07684856E14C7 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6142F79CC4A1B9A3487E78D1 /* ArmeniaAutoTax.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json.storekit; path = ArmeniaAutoTax.storekit; sourceTree = "<group>"; };
+		CEE8879579164D9C9AB49115 /* ArmeniaAutoTax.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json.storekit; path = ArmeniaAutoTax.storekit; sourceTree = "<group>"; };
+		EFC2738362A33DCF6E0E35C6 /* ArmeniaAutoTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArmeniaAutoTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33AAA5E09773B2FCB1F6E78E /* ArmeniaAutoTaxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArmeniaAutoTaxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D743C7B9A66246361EF659CA /* ArmeniaAutoTaxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArmeniaAutoTaxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+/* Begin PBXFrameworksBuildPhase section */
+		E6BDE054F9FE876DEAC9B215 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		6CBAD9E1F6C7138A4A54658E /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		9DD98193B28D51E4A5EB882A /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+/* Begin PBXGroup section */
+		CC5D242D023A9271190EA7C6 = {isa = PBXGroup; children = (085ED06E573690BA3A56BC1E, D60409337774CCE94860379A, 9B559F57AE78FD64C82512FA, 6F7199ED7B63CDA338A0FB82, ); sourceTree = "<group>"; };
+		085ED06E573690BA3A56BC1E /* ArmeniaAutoTax */ = {isa = PBXGroup; children = (6AE43E28035F9B0FA951B48D, 0FC23D5B493A7A7F80A2C311, 1EA7F7404564F84F43BEB8EE, 6ADCA75F08E0336AB68FACF5, 2B1C52BD870760779685BF3F, ); path = ArmeniaAutoTax; sourceTree = "<group>"; };
+		0FC23D5B493A7A7F80A2C311 /* Core */ = {isa = PBXGroup; children = (B850770CCF6B9CDCECAC83F5 /* Vehicle.swift */, FDB45120BBD80CC6B24B79BF /* TaxCalculator.swift */, 49E4B2535D811828A3A55500 /* TaxChartData.swift */, ); path = Core; sourceTree = "<group>"; };
+		1EA7F7404564F84F43BEB8EE /* Services */ = {isa = PBXGroup; children = (F20F1881412E439B3AE600A4 /* Localization.swift */, 90E9E26989397B826BFD5EAE /* Formatting.swift */, 6D99D0356EC6B259F389396A /* ExchangeRates.swift */, 1461CAA9FD52F627A3ACD303 /* AppStore.swift */, F45A5E3E4DA1569C8627E7F5 /* DonationStore.swift */, ); path = Services; sourceTree = "<group>"; };
+		6ADCA75F08E0336AB68FACF5 /* Views */ = {isa = PBXGroup; children = (BB2BFF6CE53237C58E1DF14C /* DesignSystem.swift */, 3D1FA95ABAF1C52C16932731 /* CalculatorView.swift */, 5626BC4E5A70F7B5EDFF2D14 /* ConverterView.swift */, 8A8F55EC48B1C37945C94BD8 /* TaxChartsView.swift */, E54CB00D5F3E2DB716184966 /* GarageView.swift */, 9EC5B8BDE37108898D451215 /* RulesView.swift */, 1B24899CB69992BD6DD40380 /* SettingsView.swift */, 6B6D23516C7718D2E22285AA /* OnboardingView.swift */, F2BAE668DCF206EE11265E34 /* DonationView.swift */, ); path = Views; sourceTree = "<group>"; };
+		2B1C52BD870760779685BF3F /* Resources */ = {isa = PBXGroup; children = (0C299F368686D7C3AF7EE31B /* Assets.xcassets */, B25F549097ABA935A4465DC3 /* Localizable.xcstrings */, 9B60E15C52A07684856E14C7 /* LaunchScreen.storyboard */, ); path = Resources; sourceTree = "<group>"; };
+		9B559F57AE78FD64C82512FA /* Configuration */ = {isa = PBXGroup; children = (CEE8879579164D9C9AB49115 /* ArmeniaAutoTax.storekit */, ); path = Configuration; sourceTree = "<group>"; };
+		D60409337774CCE94860379A /* Tests */ = {isa = PBXGroup; children = (8AFCB912BBD56E8D3F0CA941, C7186F686BA60FD3710F05D5, ); path = Tests; sourceTree = "<group>"; };
+		8AFCB912BBD56E8D3F0CA941 /* iOSTests */ = {isa = PBXGroup; children = (868A1A434EFAA93945768AF7 /* TaxCalculationTests.swift */, BE6B42101B0429173591B88D /* TaxCalculatorEdgeTests.swift */, 5D5491F7FE702DFE91AF2065 /* TaxChartDataTests.swift */, E94AC592A91D7C8046D683CB /* ExchangeRatesTests.swift */, 6F636D03A890E0AD9578D458 /* AppStoreTests.swift */, 7B1B247EE7B2E013A4BB57E9 /* FormattingTests.swift */, 3A6B8B5CB6FEF6FB621706E9 /* LocalizationTests.swift */, A85A79D0AE820F810E7D023D /* DonationTests.swift */, 5349AB4C4B30CCEBDD4E5306, ); path = iOSTests; sourceTree = "<group>"; };
+		5349AB4C4B30CCEBDD4E5306 /* Resources */ = {isa = PBXGroup; children = (6142F79CC4A1B9A3487E78D1 /* ArmeniaAutoTax.storekit */, ); path = Resources; sourceTree = "<group>"; };
+		C7186F686BA60FD3710F05D5 /* iOSUITests */ = {isa = PBXGroup; children = (3BBE19BAD8ED47AAA620913D /* ArmeniaAutoTaxUITests.swift */, ); path = iOSUITests; sourceTree = "<group>"; };
+		6F7199ED7B63CDA338A0FB82 /* Products */ = {isa = PBXGroup; children = (EFC2738362A33DCF6E0E35C6 /* ArmeniaAutoTax.app */, 33AAA5E09773B2FCB1F6E78E /* ArmeniaAutoTaxTests.xctest */, D743C7B9A66246361EF659CA /* ArmeniaAutoTaxUITests.xctest */, ); name = Products; sourceTree = "<group>"; };
+/* End PBXGroup section */
+/* Begin PBXNativeTarget section */
+		8C1A045E96B998B40533C7FF /* ArmeniaAutoTax */ = {isa = PBXNativeTarget; buildConfigurationList = 5D32D499D7738AB763D0FB39 /* Build configuration list for PBXNativeTarget "ArmeniaAutoTax" */; buildPhases = (E94059B635F42FAAB3F5149F /* Sources */, E6BDE054F9FE876DEAC9B215 /* Frameworks */, 215DBB94D79BFAC0F87B91C8 /* Resources */, ); buildRules = (); dependencies = (); name = ArmeniaAutoTax; productName = ArmeniaAutoTax; productReference = EFC2738362A33DCF6E0E35C6 /* ArmeniaAutoTax.app */; productType = "com.apple.product-type.application"; };
+		B70E7FC58E5219C3FB7E302C /* ArmeniaAutoTaxTests */ = {isa = PBXNativeTarget; buildConfigurationList = 5F0A1F9C6FEE4F423CA8D05D /* Build configuration list for PBXNativeTarget "ArmeniaAutoTaxTests" */; buildPhases = (BEB0EA167A2AC52DE6355F66 /* Sources */, 6CBAD9E1F6C7138A4A54658E /* Frameworks */, 8D711EC5FA04400F4BB73E1E /* Resources */, ); buildRules = (); dependencies = (B043FEBF99D5EBB55A5961C9, ); name = ArmeniaAutoTaxTests; productName = ArmeniaAutoTaxTests; productReference = 33AAA5E09773B2FCB1F6E78E /* ArmeniaAutoTaxTests.xctest */; productType = "com.apple.product-type.bundle.unit-test"; };
+		FB070E49FE1686C75C545055 /* ArmeniaAutoTaxUITests */ = {isa = PBXNativeTarget; buildConfigurationList = 562D2003580965D5DEE4CD2D /* Build configuration list for PBXNativeTarget "ArmeniaAutoTaxUITests" */; buildPhases = (CA48FF7D49078686AB46C82E /* Sources */, 9DD98193B28D51E4A5EB882A /* Frameworks */, B87F35E95FAB9D342C6C1986 /* Resources */, ); buildRules = (); dependencies = (530CB10833125AEBEB2AF227, ); name = ArmeniaAutoTaxUITests; productName = ArmeniaAutoTaxUITests; productReference = D743C7B9A66246361EF659CA /* ArmeniaAutoTaxUITests.xctest */; productType = "com.apple.product-type.bundle.ui-testing"; };
+/* End PBXNativeTarget section */
+/* Begin PBXProject section */
+		EC553E7FBC3AD0AD7AB94BDF /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; TargetAttributes = {8C1A045E96B998B40533C7FF = {CreatedOnToolsVersion = 16.0; }; B70E7FC58E5219C3FB7E302C = {CreatedOnToolsVersion = 16.0; TestTargetID = 8C1A045E96B998B40533C7FF; }; FB070E49FE1686C75C545055 = {CreatedOnToolsVersion = 16.0; TestTargetID = 8C1A045E96B998B40533C7FF; }; }; }; buildConfigurationList = 9F6B1A7BCFF26D263B843F95 /* Build configuration list for PBXProject */; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, ru, hy, Base, ); mainGroup = CC5D242D023A9271190EA7C6; productRefGroup = 6F7199ED7B63CDA338A0FB82; projectDirPath = ""; projectRoot = ""; targets = (8C1A045E96B998B40533C7FF /* ArmeniaAutoTax */, B70E7FC58E5219C3FB7E302C /* ArmeniaAutoTaxTests */, FB070E49FE1686C75C545055 /* ArmeniaAutoTaxUITests */, ); };
+/* End PBXProject section */
+/* Begin PBXResourcesBuildPhase section */
+		215DBB94D79BFAC0F87B91C8 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+				6FF8B1D05C3D85AFD31DA172 /* Assets.xcassets in Resources */,
+				59170CD3D7D3E6CF9B26AADF /* Localizable.xcstrings in Resources */,
+				EC825F05AA22D34DE49FB852 /* LaunchScreen.storyboard in Resources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+		8D711EC5FA04400F4BB73E1E /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+				91ACDDA489A0033D56506D27 /* ArmeniaAutoTax.storekit in Resources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+		B87F35E95FAB9D342C6C1986 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+/* Begin PBXSourcesBuildPhase section */
+		E94059B635F42FAAB3F5149F /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+				B188BBD29EB44B63DA097307 /* ArmeniaAutoTaxApp.swift in Sources */,
+				90DE282ADFEE31E42820E9C1 /* Vehicle.swift in Sources */,
+				81D2EE715875ACA374007ECC /* TaxCalculator.swift in Sources */,
+				5DFD445F0C375CF196511869 /* TaxChartData.swift in Sources */,
+				C8470AAA7AEFF0D09558CD7B /* Localization.swift in Sources */,
+				9C79ACBF10876953D70F13C6 /* Formatting.swift in Sources */,
+				63325062C19BE814CFBBB8A3 /* ExchangeRates.swift in Sources */,
+				44656AC9F55E4FF989A421F7 /* AppStore.swift in Sources */,
+				9DC20C19580804775FD82DA3 /* DonationStore.swift in Sources */,
+				FF98B10B2D8802B615CD4CFF /* DesignSystem.swift in Sources */,
+				3DB0CC2798549CB80C4429D0 /* CalculatorView.swift in Sources */,
+				7F74127E5B8540EDBD041BF4 /* ConverterView.swift in Sources */,
+				3C4C0C771903A5BF7685AE0F /* TaxChartsView.swift in Sources */,
+				6A35D82572C03D4C1BC8DCA9 /* GarageView.swift in Sources */,
+				29CC76297E7BA93D3150F71E /* RulesView.swift in Sources */,
+				62F09DAA3A73F533C463BFB5 /* SettingsView.swift in Sources */,
+				23811F80824ACF9B65514942 /* OnboardingView.swift in Sources */,
+				A7B5D1A4581A983B3B753F8B /* DonationView.swift in Sources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+		BEB0EA167A2AC52DE6355F66 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+				08D4CFAECB6DA1C4B68E4536 /* TaxCalculationTests.swift in Sources */,
+				852869DA51C3F996DBD6024F /* TaxCalculatorEdgeTests.swift in Sources */,
+				B0CBCFABB18523C8CF4C55AF /* TaxChartDataTests.swift in Sources */,
+				C44F265C56988D2E58C7BD29 /* ExchangeRatesTests.swift in Sources */,
+				DB15704B6D0227C0C3ADB492 /* AppStoreTests.swift in Sources */,
+				C7F7200A1B0C23D3D02CDAEB /* FormattingTests.swift in Sources */,
+				D0BA2AB02DC2F9A4EFF69C35 /* LocalizationTests.swift in Sources */,
+				284D8751C13DDDA35AD41749 /* DonationTests.swift in Sources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+		CA48FF7D49078686AB46C82E /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+				9A23BA61E35F956F49BDEAC7 /* ArmeniaAutoTaxUITests.swift in Sources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+/* Begin PBXTargetDependency section */
+		B043FEBF99D5EBB55A5961C9 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 8C1A045E96B998B40533C7FF /* ArmeniaAutoTax */; targetProxy = 0D7FDB17A812E0D6329D4B4A /* PBXContainerItemProxy */; };
+		530CB10833125AEBEB2AF227 /* PBXTargetDependency */ = {isa = PBXTargetDependency; target = 8C1A045E96B998B40533C7FF /* ArmeniaAutoTax */; targetProxy = F5E07E2EE921C07DC3BC6656 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
+/* Begin XCBuildConfiguration section */
+		184B519F8E1416CCE38CFFD7 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; SDKROOT = iphoneos; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 5.0; }; name = Debug; };
+		A824290273A346217D9BE6F4 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; IPHONEOS_DEPLOYMENT_TARGET = 17.0; SDKROOT = iphoneos; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; }; name = Release; };
+		0D9B6C467828201280D620A8 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "Armenia Auto Tax"; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES; INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		E532E4CDC1E6865CE523475E /* Release */ = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "Armenia Auto Tax"; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES; INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+		7CAEF1B744878FE1A4DD3594 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ArmeniaAutoTax.app/ArmeniaAutoTax"; }; name = Debug; };
+		5798DB0A8EF2871B955A63C6 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {BUNDLE_LOADER = "$(TEST_HOST)"; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ArmeniaAutoTax.app/ArmeniaAutoTax"; }; name = Release; };
+		DD400DE389983B2F4D009686 /* Debug */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_TESTABILITY = YES; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = ArmeniaAutoTax; }; name = Debug; };
+		C2EA3CEA15FD877DC6FFD237 /* Release */ = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax.uitests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_OPTIMIZATION_LEVEL = "-O"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_TARGET_NAME = ArmeniaAutoTax; }; name = Release; };
+/* End XCBuildConfiguration section */
+/* Begin XCConfigurationList section */
+		9F6B1A7BCFF26D263B843F95 /* Build configuration list */ = {isa = XCConfigurationList; buildConfigurations = (184B519F8E1416CCE38CFFD7 /* Debug */, A824290273A346217D9BE6F4 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		5D32D499D7738AB763D0FB39 /* Build configuration list */ = {isa = XCConfigurationList; buildConfigurations = (0D9B6C467828201280D620A8 /* Debug */, E532E4CDC1E6865CE523475E /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		5F0A1F9C6FEE4F423CA8D05D /* Build configuration list */ = {isa = XCConfigurationList; buildConfigurations = (7CAEF1B744878FE1A4DD3594 /* Debug */, 5798DB0A8EF2871B955A63C6 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		562D2003580965D5DEE4CD2D /* Build configuration list */ = {isa = XCConfigurationList; buildConfigurations = (DD400DE389983B2F4D009686 /* Debug */, C2EA3CEA15FD877DC6FFD237 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = EC553E7FBC3AD0AD7AB94BDF /* Project object */;
+}

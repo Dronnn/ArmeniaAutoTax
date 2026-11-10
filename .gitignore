@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Xcode
+DerivedData/
+.build/
+.swiftpm/
+*.xcuserstate
+xcuserdata/
+*.ipa
+*.app
+*.dSYM
+
+# Internal working documents (not part of the public source)
+Documentation/
+README_RU.md
+docs/
+logs/
+build_project.py

@@ -1,0 +1,310 @@
+import SwiftUI
+
+struct CalculatorView: View {
+    @ObservedObject var store: AppStore
+    @ObservedObject var rates: ExchangeRatesStore
+    @State private var showAdvanced = false
+    @State private var alert: Confirmation?
+    @State private var yearText = "2019"
+    @State private var horsepowerText = "243"
+    @FocusState private var focusedField: Field?
+
+    private enum Field: Hashable {
+        case year
+        case horsepower
+    }
+
+    private enum Confirmation: Identifiable {
+        case saved
+        case calculation
+
+        var id: Int {
+            switch self {
+            case .saved: 0
+            case .calculation: 1
+            }
+        }
+
+        var title: String {
+            switch self {
+            case .saved: L10n.string("alert.vehicleSaved")
+            case .calculation: L10n.string("alert.calculationSaved")
+            }
+        }
+    }
+
+    private var tax: TaxBreakdown { store.calculation }
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 23) {
+                introduction
+                vehicleForm
+                if store.validDraft {
+                    resultCard
+                    ConverterView(rates: rates, language: store.language, initialAMD: tax.periodTotal)
+                    TaxChartsView(vehicle: store.draft, language: store.language)
+                } else {
+                    SurfaceCard {
+                        InlineMessage(symbol: "exclamationmark.triangle",
+                                      message: t("calculator.invalid"))
+                    }
+                }
+                footer
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 20)
+        }
+        .contentMargins(.bottom, 104, for: .scrollContent)
+        .background(Palette.background)
+        .navigationTitle(t("calculator.title"))
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: syncTextFields)
+        .onChange(of: store.draft.id) { _, _ in syncTextFields() }
+        .alert(item: $alert) { value in
+            Alert(title: Text(value.title), dismissButton: .default(Text(t("common.ok"))))
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button(t("common.ok")) { focusedField = nil }
+            }
+        }
+    }
+
+    private var introduction: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(t("app.brand"))
+                .font(.caption.bold()).tracking(2).foregroundStyle(Palette.accent)
+            Text(t("calculator.hero"))
+                .font(.system(size: 34, weight: .heavy, design: .rounded))
+                .fixedSize(horizontal: false, vertical: true)
+            Text(t("calculator.subtitle"))
+                .font(.subheadline).foregroundStyle(.secondary)
+            Text(t("calculator.rules2026"))
+                .font(.caption2.bold()).tracking(1)
+                .padding(.horizontal, 11).padding(.vertical, 6)
+                .background(Palette.accent.opacity(0.11), in: Capsule())
+        }
+    }
+
+    private var vehicleForm: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                SectionHeader(kicker: t("calculator.section.kicker"),
+                              title: t("calculator.section.title"))
+                Button(t("calculator.reset")) { store.resetDraft() }
+                    .font(.subheadline.weight(.medium))
+                    .tint(Palette.accent)
+            }
+            SurfaceCard {
+                VStack(alignment: .leading, spacing: 17) {
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(t("calculator.name.label")).font(.caption).foregroundStyle(.secondary)
+                        TextField(t("calculator.name.placeholder"), text: $store.draft.name)
+                            .textInputAutocapitalization(.words)
+                            .autocorrectionDisabled()
+                            .textFieldStyle(.roundedBorder)
+                    }
+                    HStack(spacing: 14) {
+                        VStack(alignment: .leading, spacing: 7) {
+                            Text(t("calculator.year")).font(.caption).foregroundStyle(.secondary)
+                            TextField("2019", text: yearBinding)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(.roundedBorder)
+                                .focused($focusedField, equals: .year)
+                                .accessibilityIdentifier("calculator.year")
+                        }
+                        VStack(alignment: .leading, spacing: 7) {
+                            Text(t("calculator.horsepower")).font(.caption).foregroundStyle(.secondary)
+                            TextField("243", text: horsepowerBinding)
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(.roundedBorder)
+                                .focused($focusedField, equals: .horsepower)
+                                .accessibilityIdentifier("calculator.horsepower")
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(t("calculator.category")).font(.caption).foregroundStyle(.secondary)
+                        Picker(t("calculator.category"), selection: $store.draft.category) {
+                            ForEach(VehicleCategory.allCases) { category in
+                                Text(category.localizedTitle(language: store.language)).tag(category)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        .tint(Palette.accent)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    InlineMessage(symbol: "info.circle", message: t("calculator.info"))
+                    Divider()
+                    DisclosureGroup(isExpanded: $showAdvanced) {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Stepper(f("calculator.months", store.draft.taxableMonths),
+                                    value: $store.draft.taxableMonths, in: 1...12)
+                            Stepper(f("calculator.surcharge", store.draft.communitySurchargePercent),
+                                    value: $store.draft.communitySurchargePercent, in: 0...10)
+                            Text(t("calculator.advanced.note"))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                        .padding(.top, 10)
+                    } label: {
+                        Label(t("calculator.advanced"), systemImage: "slider.horizontal.3")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(Palette.ink)
+                    }
+                    Button {
+                        store.saveVehicle()
+                        alert = .saved
+                    } label: {
+                        Label(t("calculator.saveVehicle"), systemImage: "plus.circle.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(Palette.accent)
+                    .disabled(!store.validDraft)
+                    .accessibilityIdentifier("calculator.saveVehicle")
+                    Text(t("calculator.privacy"))
+                        .font(.caption2).foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+
+    private var resultCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Label(t("calculator.result.kicker"), systemImage: "checkmark.seal.fill")
+                        .font(.caption2.bold()).tracking(1)
+                    Spacer()
+                    Text(f("calculator.result.period", tax.taxableMonths))
+                        .font(.caption)
+                }
+                .foregroundStyle(.white.opacity(0.78))
+                Text(MoneyText.amount(tax.periodTotal, digits: 2))
+                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .minimumScaleFactor(0.6)
+                    .lineLimit(1)
+                    .foregroundStyle(.white)
+                    .accessibilityIdentifier("calculator.result.amount")
+                HStack(spacing: 7) {
+                    Text("≈ \(MoneyText.amount(rates.current.convert(tax.periodTotal, from: .amd, to: .usd), currency: .usd))")
+                    Text("·")
+                    Text("\(MoneyText.amount(rates.current.convert(tax.periodTotal, from: .amd, to: .eur), currency: .eur))")
+                    Text("·")
+                    Text("\(MoneyText.amount(rates.current.convert(tax.periodTotal, from: .amd, to: .rub), currency: .rub))")
+                }
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.8))
+                .lineLimit(2)
+                .minimumScaleFactor(0.75)
+                HStack(spacing: 10) {
+                    statPill(label: t("calculator.stat.age"),
+                             value: L10n.years(tax.age, language: store.language))
+                    statPill(label: t("calculator.stat.discount"), value: "−\(tax.ageDiscountPercent)%")
+                    statPill(label: t("calculator.stat.monthly"), value: MoneyText.amount(tax.averagePerMonth))
+                }
+            }
+            .padding(19)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Palette.darkCard, in: RoundedRectangle(cornerRadius: 23))
+
+            SurfaceCard {
+                VStack(alignment: .leading, spacing: 14) {
+                    Text(t("calculator.breakdown.title")).font(.headline)
+                    MetricRow(label: f("calculator.breakdown.base",
+                                       store.draft.horsepower,
+                                       tax.baseRatePerHorsepower),
+                              value: MoneyText.amount(tax.baseAmount))
+                    if tax.extraHorsepower > 0 {
+                        MetricRow(label: f("calculator.breakdown.extra", tax.extraHorsepower),
+                                  value: MoneyText.amount(tax.extraAmount))
+                    }
+                    MetricRow(label: t("calculator.breakdown.subtotal"),
+                              value: MoneyText.amount(tax.subtotal))
+                    if !tax.isExempt {
+                        MetricRow(label: f("calculator.breakdown.discount", tax.ageDiscountPercent),
+                                  value: "−\(MoneyText.amount(tax.ageDiscountAmount))")
+                        MetricRow(label: f("calculator.breakdown.surcharge", tax.surchargePercent),
+                                  value: MoneyText.amount(tax.surchargeAmount))
+                        if tax.taxableMonths != 12 {
+                            MetricRow(label: f("calculator.breakdown.proration", tax.taxableMonths),
+                                      value: MoneyText.amount(tax.periodTotal))
+                        }
+                    }
+                    Divider()
+                    MetricRow(label: t("calculator.breakdown.total"),
+                              value: MoneyText.amount(tax.periodTotal), emphasized: true)
+                    if tax.isExempt {
+                        InlineMessage(symbol: "checkmark.shield", message: t("calculator.exempt"))
+                    }
+                    Divider()
+                    Button {
+                        store.recordCalculation()
+                        alert = .calculation
+                    } label: {
+                        Label(t("calculator.saveHistory"), systemImage: "clock.arrow.circlepath")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Palette.accent)
+                }
+            }
+            InlineMessage(symbol: "text.book.closed", message: t("calculator.disclaimer"))
+        }
+    }
+
+    private func statPill(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label).font(.system(size: 10)).foregroundStyle(.white.opacity(0.68))
+            Text(value).font(.caption2.bold()).foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.7)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(10)
+        .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    private var footer: some View {
+        HStack {
+            Text(t("app.brand")).font(.caption.bold()).tracking(1)
+            Spacer()
+            Text(t("calculator.footer")).font(.caption2)
+        }
+        .foregroundStyle(.secondary)
+        .padding(.bottom, 8)
+    }
+
+    private var yearBinding: Binding<String> {
+        Binding(
+            get: { yearText },
+            set: { newValue in
+                yearText = String(newValue.filter(\.isNumber).prefix(4))
+                store.draft.manufactureYear = Int(yearText) ?? 0
+            }
+        )
+    }
+
+    private var horsepowerBinding: Binding<String> {
+        Binding(
+            get: { horsepowerText },
+            set: { newValue in
+                horsepowerText = String(newValue.filter(\.isNumber).prefix(5))
+                store.draft.horsepower = Int(horsepowerText) ?? 0
+            }
+        )
+    }
+
+    private func syncTextFields() {
+        yearText = String(store.draft.manufactureYear)
+        horsepowerText = String(store.draft.horsepower)
+    }
+
+    private func t(_ key: String) -> String {
+        L10n.string(key, language: store.language)
+    }
+
+    private func f(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: t(key), locale: store.language.locale, arguments: arguments)
+    }
+}
