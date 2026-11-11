@@ -52,8 +52,8 @@ struct TaxChartsView: View {
                         InlineMessage(
                             symbol: "chart.bar.xaxis",
                             message: f("charts.power.note",
-                                       MoneyText.number(thresholdPair.low),
-                                       MoneyText.number(thresholdPair.high),
+                                       Int(thresholdPair.low),
+                                       Int(thresholdPair.high),
                                        MoneyText.amount(thresholdDifference, digits: 0))
                         )
                     } else {

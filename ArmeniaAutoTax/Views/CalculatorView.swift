@@ -66,6 +66,7 @@ struct CalculatorView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 20)
+                .appContentWidth()
             }
             .contentMargins(.bottom, 104, for: .scrollContent)
             .background(Palette.background)
@@ -151,9 +152,9 @@ struct CalculatorView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     InlineMessage(
                         symbol: "calendar.badge.plus",
-                        message: f("calculator.newYear", currentYear, store.taxYear)
+                        message: f("calculator.newYear", String(currentYear), String(store.taxYear))
                     )
-                    Button(f("calculator.newYear.action", currentYear)) {
+                    Button(f("calculator.newYear.action", String(currentYear))) {
                         store.taxYear = currentYear
                     }
                     .font(.footnote.weight(.semibold))
@@ -170,7 +171,7 @@ struct CalculatorView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     InlineMessage(
                         symbol: "slider.horizontal.3",
-                        message: f("calculator.customRates", store.taxYear)
+                        message: f("calculator.customRates", String(store.taxYear))
                     )
                     NavigationLink(t("calculator.customRates.action")) {
                         TaxRatesEditorView(taxRates: taxRates, language: store.language, initialYear: store.taxYear)
@@ -183,7 +184,7 @@ struct CalculatorView: View {
             SurfaceCard {
                 InlineMessage(
                     symbol: "clock.badge.exclamationmark",
-                    message: f("calculator.projectedRates", store.taxYear)
+                    message: f("calculator.projectedRates", String(store.taxYear))
                 )
             }
         }

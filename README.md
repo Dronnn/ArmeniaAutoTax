@@ -17,39 +17,47 @@
 
 ---
 
-Armenia Auto Tax turns the Armenian vehicle property tax rules into a clear, fast iPhone experience. It estimates the annual and period tax, explains every part of the calculation, converts the result into four currencies, compares vehicles in a local garage and keeps a private calculation history.
+Armenia Auto Tax turns the Armenian vehicle property tax rules into a clear, fast iPhone and iPad experience. It estimates the annual and period tax, explains every part of the calculation, converts the result into four currencies, compares vehicles in a local garage and keeps a private calculation history.
 
 The app is fully on-device. There is no account, no backend, no advertising and no tracking.
 
 ## Features
 
 - **Verified 2026 calculator** for passenger cars, buses, cargo/cargo-passenger vehicles, motorcycles and ATVs/snowmobiles/watercraft. 2027–2030 are projected from the 2026 schedule and clearly marked.
+- **Tax year picker** from 2026 to 2030, with a visible verified/projected status and a suggestion when a new calendar year starts.
 - **The real rate bands**: 200/300/500 AMD per hp for passenger cars, the extra 1,000 AMD above 150 hp, 100/200 AMD for buses and cargo, 40 AMD for motorcycles and 150 AMD for other vehicles.
 - **EV power rule**: choose fuel/hybrid, electric power from the EAEU e-passport, or raw electric motor power. Raw power uses the 2026 1.5 / 2.5 rule; e-passport power is used as is.
+- **Power in hp or kW** with the statutory 1.36 coefficient and decimal input.
 - **Age reduction** of 10% per year from the third tax year following manufacture, capped at 50%, plus the 20th-year cargo exemption.
+- **Ownership dates** can produce the Article 246 liability months: the acquisition month is excluded, the disposal month is included, and a December acquisition produces zero months in that tax year.
 - **Editable rate schedules**: inspect the official bands, override them per tax year, preview the effect and reset to the verified defaults.
 - **Four-currency converter** for AMD, USD, EUR and RUB with official Central Bank of Armenia rates, cached offline values and manual overrides.
 - **Swift Charts** for taxable-horsepower jumps and a 2026–2030 projection using the effective schedule.
 - **Garage and history** with local JSON persistence, one-tap reload, deletion and JSON export through the native share sheet.
 - **English, Russian and Armenian** with English as the default. The language can be changed during onboarding or later in Settings.
 - **Appearance control**: system, light or dark.
+- **iPhone and iPad** layouts with a centered reading width on iPad.
 - **Optional tips** through StoreKit 2 consumables. Donations unlock nothing; every feature is always available.
 
 ## Screenshots
 
-| Welcome | Calculator |
-|:---:|:---:|
-| <img src="Screenshots/onboarding.png" width="260"> | <img src="Screenshots/calculator.png" width="260"> |
-
-| Charts and converter | Garage | Settings |
+| Welcome | Calculator | EV power |
 |:---:|:---:|:---:|
-| <img src="Screenshots/charts.png" width="220"> | <img src="Screenshots/garage.png" width="220"> | <img src="Screenshots/settings.png" width="220"> |
+| <img src="Screenshots/onboarding.png" width="210"> | <img src="Screenshots/calculator.png" width="210"> | <img src="Screenshots/ev.png" width="210"> |
+
+| Any tax year | Charts | Garage |
+|:---:|:---:|:---:|
+| <img src="Screenshots/years.png" width="210"> | <img src="Screenshots/charts.png" width="210"> | <img src="Screenshots/garage.png" width="210"> |
+
+| Settings | Donations |
+|:---:|:---:|
+| <img src="Screenshots/settings.png" width="210"> | <img src="Screenshots/donations.png" width="210"> |
 
 ## Requirements
 
 - Xcode 16 or newer
 - iOS 17 or newer
-- iPhone (the app is designed for iPhone; iPad runs it in compatibility mode)
+- iPhone and iPad
 - No CocoaPods, Carthage, Swift Package dependencies, server, account or API key
 
 ## Run the app

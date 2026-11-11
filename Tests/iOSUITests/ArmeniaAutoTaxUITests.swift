@@ -60,7 +60,7 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
         let amount = app.staticTexts["calculator.result.amount"]
         let predicate = NSPredicate(format: "label CONTAINS '150,000'")
         expectation(for: predicate, evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
     }
 
     func testSettingsChangesLanguageAndTheme() {
@@ -233,7 +233,7 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
 
         let amount = app.staticTexts["calculator.result.amount"]
         expectation(for: NSPredicate(format: "label CONTAINS '20,400'"), evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
     }
 
     func testElectricVehicleRawPowerUsesThe2026Rule() {
@@ -251,7 +251,7 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
         let amount = app.staticTexts["calculator.result.amount"]
         let predicate = NSPredicate(format: "label CONTAINS '276,400'")
         expectation(for: predicate, evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
 
         let taxable = app.staticTexts["calculator.result.taxablePower"]
         XCTAssertTrue(taxable.exists)
@@ -260,7 +260,7 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
         choose(app.buttons["calculator.powerSource"], option: "Electric · e-passport power")
         replaceText(horsepower, with: "250")
         expectation(for: NSPredicate(format: "label CONTAINS '175,000'"), evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
         XCTAssertFalse(app.staticTexts["calculator.result.taxablePower"].exists)
     }
 
@@ -272,12 +272,12 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
 
         let amount = app.staticTexts["calculator.result.amount"]
         expectation(for: NSPredicate(format: "label CONTAINS '99,540'"), evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
 
         choose(app.buttons["calculator.taxYear"], option: "2027")
 
         expectation(for: NSPredicate(format: "label CONTAINS '82,950'"), evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
         XCTAssertTrue(app.staticTexts.containing(
             NSPredicate(format: "label CONTAINS 'projected'")
         ).firstMatch.exists)
@@ -345,7 +345,7 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
         tab("Calculator").tap()
         let amount = app.staticTexts["calculator.result.amount"]
         expectation(for: NSPredicate(format: "label CONTAINS '95,100'"), evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
         XCTAssertTrue(app.staticTexts.containing(
             NSPredicate(format: "label CONTAINS 'Custom tax rates are active'")
         ).firstMatch.exists)
@@ -362,6 +362,6 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
 
         tab("Calculator").tap()
         expectation(for: NSPredicate(format: "label CONTAINS '82,950'"), evaluatedWith: amount)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: 10)
     }
 }

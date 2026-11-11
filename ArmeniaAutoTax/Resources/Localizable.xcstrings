@@ -402,19 +402,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Custom tax rates are active for %d."
+            "value" : "Custom tax rates are active for %@."
           }
         },
         "hy" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d-ի համար գործում են սեփական սակագներ։"
+            "value" : "%@-ի համար գործում են սեփական սակագներ։"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Для %d действуют свои тарифы."
+            "value" : "Для %@ действуют свои тарифы."
           }
         }
       }
@@ -816,19 +816,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d rates are projected from the 2026 schedule. Check official changes."
+            "value" : "%@ rates are projected from the 2026 schedule. Check official changes."
           }
         },
         "hy" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d-ի սակագները կանխատեսված են 2026-ի սխեմայից։ Ստուգեք պաշտոնական փոփոխությունները։"
+            "value" : "%@-ի սակագները կանխատեսված են 2026-ի սխեմայից։ Ստուգեք պաշտոնական փոփոխությունները։"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Тарифы на %d — прогноз по схеме 2026 года. Проверьте официальные изменения."
+            "value" : "Тарифы на %@ — прогноз по схеме 2026 года. Проверьте официальные изменения."
           }
         }
       }
@@ -6348,19 +6348,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tax year %d is available. You are viewing %d."
+            "value" : "Tax year %@ is available. You are viewing %@."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Доступен налоговый год %d. Сейчас выбран %d."
+            "value" : "Доступен налоговый год %@. Сейчас выбран %@."
           }
         },
         "hy" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Հասանելի է %d հարկային տարին։ Ընտրված է %d-ը։"
+            "value" : "Հասանելի է %@ հարկային տարին։ Ընտրված է %@-ը։"
           }
         }
       }
@@ -6371,19 +6371,19 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Switch to %d"
+            "value" : "Switch to %@"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Перейти на %d"
+            "value" : "Перейти на %@"
           }
         },
         "hy" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Անցնել %d-ին"
+            "value" : "Անցնել %@-ին"
           }
         }
       }

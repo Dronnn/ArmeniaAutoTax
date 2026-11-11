@@ -87,12 +87,24 @@ final class AppStore: ObservableObject {
         hasCompletedOnboarding = testDefaults.bool(forKey: Self.onboardingKey)
 
         #if DEBUG
+        if let value = LaunchOptions.value(after: "-demo-tax-year"),
+           let year = Int(value) {
+            taxYear = TaxScheduleStore.clampedYear(year)
+        }
         if let code = LaunchOptions.value(after: "-app-language"),
            let selected = AppLanguage(rawValue: code) {
             language = selected
         }
         if arguments.contains("-demo-data") {
             seedDemoData()
+        }
+        if arguments.contains("-demo-ev") {
+            draft = Vehicle(
+                name: "Nissan Ariya",
+                manufactureYear: 2023,
+                horsepower: 544,
+                powerSource: .electricRaw
+            )
         }
         #endif
     }

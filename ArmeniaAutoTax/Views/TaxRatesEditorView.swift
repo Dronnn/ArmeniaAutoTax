@@ -52,6 +52,7 @@ struct TaxRatesEditorView: View {
                 resetButton
             }
             .padding(16)
+            .appContentWidth()
         }
         .contentMargins(.bottom, 100, for: .scrollContent)
         .background(Palette.background)

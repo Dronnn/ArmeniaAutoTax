@@ -41,6 +41,20 @@ enum MoneyText {
     }
 }
 
+/// Keeps readable line lengths and control widths on iPad while the
+/// surrounding scroll view still fills the window.
+struct AppContentWidth: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: 880, alignment: .leading)
+            .frame(maxWidth: .infinity)
+    }
+}
+
+extension View {
+    func appContentWidth() -> some View { modifier(AppContentWidth()) }
+}
+
 struct SectionHeader: View {
     let kicker: String
     let title: String

@@ -41,6 +41,7 @@ struct DonationView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 20)
+                .appContentWidth()
             }
             .contentMargins(.bottom, 170, for: .scrollContent)
         }
@@ -50,10 +51,15 @@ struct DonationView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
             if store.feedback != .thankYou {
-                donateButton
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(.bar)
+                HStack {
+                    Spacer(minLength: 0)
+                    donateButton
+                        .frame(maxWidth: 848)
+                    Spacer(minLength: 0)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.bar)
             }
         }
         .task {

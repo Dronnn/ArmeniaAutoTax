@@ -43,6 +43,7 @@ struct GarageView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 20)
+            .appContentWidth()
         }
         .contentMargins(.bottom, 104, for: .scrollContent)
         .background(Palette.background)

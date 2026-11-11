@@ -21,6 +21,7 @@ struct RulesView: View {
                 links
             }
             .padding(16)
+            .appContentWidth()
         }
         .contentMargins(.bottom, 104, for: .scrollContent)
         .background(Palette.background)

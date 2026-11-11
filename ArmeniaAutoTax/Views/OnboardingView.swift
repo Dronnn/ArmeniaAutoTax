@@ -29,9 +29,6 @@ struct OnboardingView: View {
 
     private var brand: some View {
         HStack(spacing: 9) {
-            Text("֏")
-                .font(.system(size: 22, weight: .heavy, design: .rounded))
-                .foregroundStyle(Palette.accent)
             Text(L10n.string("app.brand"))
                 .font(.caption.bold())
                 .tracking(2)
