@@ -8,7 +8,7 @@ enum MainTab: Hashable {
 struct ArmeniaAutoTaxApp: App {
     @StateObject private var store = AppStore()
     @StateObject private var rates = ExchangeRatesStore()
-    @State private var selectedTab: MainTab = .calculator
+    @State private var selectedTab: MainTab = .launchDefault
 
     var body: some Scene {
         WindowGroup {
@@ -69,7 +69,11 @@ struct ArmeniaAutoTaxApp: App {
             .tag(MainTab.settings)
 
             NavigationStack {
-                DonationView(language: store.language)
+                if selectedTab == .donations {
+                    DonationView(language: store.language)
+                } else {
+                    Color.clear
+                }
             }
             .tabItem { Label(L10n.string("tab.donations"), systemImage: "heart.fill") }
             .tag(MainTab.donations)
@@ -83,5 +87,21 @@ struct ArmeniaAutoTaxApp: App {
         case .light: .light
         case .dark: .dark
         }
+    }
+}
+
+extension MainTab {
+    static var launchDefault: MainTab {
+        #if DEBUG
+        switch LaunchOptions.value(after: "-start-tab") {
+        case "garage": .garage
+        case "rules": .rules
+        case "settings": .settings
+        case "donations": .donations
+        default: .calculator
+        }
+        #else
+        .calculator
+        #endif
     }
 }

@@ -36,31 +36,40 @@ struct CalculatorView: View {
     private var tax: TaxBreakdown { store.calculation }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 23) {
-                introduction
-                vehicleForm
-                if store.validDraft {
-                    resultCard
-                    ConverterView(rates: rates, language: store.language, initialAMD: tax.periodTotal)
-                    TaxChartsView(vehicle: store.draft, language: store.language)
-                } else {
-                    SurfaceCard {
-                        InlineMessage(symbol: "exclamationmark.triangle",
-                                      message: t("calculator.invalid"))
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 23) {
+                    introduction.id("calculator.top")
+                    vehicleForm
+                    if store.validDraft {
+                        resultCard.id("calculator.result")
+                        ConverterView(rates: rates, language: store.language, initialAMD: tax.periodTotal)
+                            .id("calculator.converter")
+                        TaxChartsView(vehicle: store.draft, language: store.language)
+                            .id("calculator.charts")
+                    } else {
+                        SurfaceCard {
+                            InlineMessage(symbol: "exclamationmark.triangle",
+                                          message: t("calculator.invalid"))
+                        }
                     }
+                    footer.id("calculator.footer")
                 }
-                footer
+                .padding(.horizontal, 16)
+                .padding(.vertical, 20)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 20)
+            .contentMargins(.bottom, 104, for: .scrollContent)
+            .background(Palette.background)
+            .onAppear {
+                syncTextFields()
+                scrollForScreenshot(proxy)
+            }
+            .onChange(of: store.draft.id) { _, _ in syncTextFields() }
         }
-        .contentMargins(.bottom, 104, for: .scrollContent)
-        .background(Palette.background)
         .navigationTitle(t("calculator.title"))
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: syncTextFields)
-        .onChange(of: store.draft.id) { _, _ in syncTextFields() }
+        .toolbarBackground(Palette.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .alert(item: $alert) { value in
             Alert(title: Text(value.title), dismissButton: .default(Text(t("common.ok"))))
         }
@@ -70,6 +79,27 @@ struct CalculatorView: View {
                 Button(t("common.ok")) { focusedField = nil }
             }
         }
+    }
+
+    private func scrollForScreenshot(_ proxy: ScrollViewProxy) {
+        #if DEBUG
+        guard let section = LaunchOptions.value(after: "-screenshot-scroll") else { return }
+        let target: String
+        switch section {
+        case "result": target = "calculator.result"
+        case "converter": target = "calculator.converter"
+        case "charts": target = "calculator.charts"
+        case "age": target = "charts.age"
+        case "footer": target = "calculator.footer"
+        default: target = "calculator.top"
+        }
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 450_000_000)
+            withTransaction(Transaction(animation: nil)) {
+                proxy.scrollTo(target, anchor: .top)
+            }
+        }
+        #endif
     }
 
     private var introduction: some View {

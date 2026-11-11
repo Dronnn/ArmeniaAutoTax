@@ -79,7 +79,32 @@ final class AppStore: ObservableObject {
         appearance = AppAppearance(rawValue: testDefaults.string(forKey: Self.appearanceKey) ?? "system") ?? .system
         language = AppLanguage(rawValue: testDefaults.string(forKey: AppLanguage.storageKey) ?? "") ?? .english
         hasCompletedOnboarding = testDefaults.bool(forKey: Self.onboardingKey)
+
+        #if DEBUG
+        if let code = LaunchOptions.value(after: "-app-language"),
+           let selected = AppLanguage(rawValue: code) {
+            language = selected
+        }
+        if arguments.contains("-demo-data") {
+            seedDemoData()
+        }
+        #endif
     }
+
+    #if DEBUG
+    private func seedDemoData() {
+        let camry = Vehicle(name: "Toyota Camry", manufactureYear: 2019, horsepower: 243)
+        let x5 = Vehicle(name: "BMW X5", manufactureYear: 2021, horsepower: 340)
+        let transit = Vehicle(name: "Ford Transit", manufactureYear: 2018, horsepower: 170, category: .cargo)
+        draft = camry
+        garage = [camry, x5, transit]
+        history = [
+            TaxHistoryEntry(vehicle: x5, tax: TaxCalculator.calculate(x5)),
+            TaxHistoryEntry(vehicle: transit, tax: TaxCalculator.calculate(transit))
+        ]
+        persist()
+    }
+    #endif
 
     var calculation: TaxBreakdown { TaxCalculator.calculate(draft) }
 
@@ -172,4 +197,20 @@ private struct PersistentDocument: Codable {
     var draft: Vehicle
     var garage: [Vehicle]
     var history: [TaxHistoryEntry]
+}
+
+/// Debug-only launch switches used by the screenshot and UI-test automation.
+enum LaunchOptions {
+    static var arguments: [String] { ProcessInfo.processInfo.arguments }
+
+    static func value(after flag: String) -> String? {
+        guard let index = arguments.firstIndex(of: flag),
+              arguments.indices.contains(index + 1)
+        else { return nil }
+        return arguments[index + 1]
+    }
+
+    static var isDemoDonations: Bool {
+        arguments.contains("-demo-donations")
+    }
 }

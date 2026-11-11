@@ -12,20 +12,27 @@ struct DonationTier: Identifiable, Equatable, Sendable {
     let id: String
     let nameKey: String
     let fallbackPrice: String
+    let icon: String
 
     static let all: [DonationTier] = [
         DonationTier(id: "com.mrmaier.armeniaautotax.tip.small",
-                     nameKey: "donations.tier.small", fallbackPrice: "$2.99"),
+                     nameKey: "donations.tier.small", fallbackPrice: "$2.99",
+                     icon: "cup.and.saucer.fill"),
         DonationTier(id: "com.mrmaier.armeniaautotax.tip.medium",
-                     nameKey: "donations.tier.medium", fallbackPrice: "$4.99"),
+                     nameKey: "donations.tier.medium", fallbackPrice: "$4.99",
+                     icon: "takeoutbag.and.cup.and.straw.fill"),
         DonationTier(id: "com.mrmaier.armeniaautotax.tip.large",
-                     nameKey: "donations.tier.large", fallbackPrice: "$7.99"),
+                     nameKey: "donations.tier.large", fallbackPrice: "$7.99",
+                     icon: "heart.fill"),
         DonationTier(id: "com.mrmaier.armeniaautotax.tip.generous",
-                     nameKey: "donations.tier.generous", fallbackPrice: "$19.99"),
+                     nameKey: "donations.tier.generous", fallbackPrice: "$19.99",
+                     icon: "star.fill"),
         DonationTier(id: "com.mrmaier.armeniaautotax.tip.patron",
-                     nameKey: "donations.tier.patron", fallbackPrice: "$49.99"),
+                     nameKey: "donations.tier.patron", fallbackPrice: "$49.99",
+                     icon: "crown.fill"),
         DonationTier(id: "com.mrmaier.armeniaautotax.tip.extraordinary",
-                     nameKey: "donations.tier.extraordinary", fallbackPrice: "$99.99")
+                     nameKey: "donations.tier.extraordinary", fallbackPrice: "$99.99",
+                     icon: "sparkles")
     ]
 }
 
@@ -33,6 +40,14 @@ struct DonationTier: Identifiable, Equatable, Sendable {
 final class DonationStore: ObservableObject {
     static let shared = DonationStore()
     static let productIDs = DonationTier.all.map(\.id)
+
+    static var isDemoMode: Bool {
+        #if DEBUG
+        LaunchOptions.isDemoDonations
+        #else
+        false
+        #endif
+    }
 
     @Published private(set) var products: [StoreKit.Product] = []
     @Published private(set) var isLoading = false
@@ -71,8 +86,22 @@ final class DonationStore: ObservableObject {
         L10n.string(tier.nameKey, language: language)
     }
 
+    func isAvailable(_ tier: DonationTier) -> Bool {
+        Self.isDemoMode || product(for: tier) != nil
+    }
+
+    func demoPurchase() {
+        guard Self.isDemoMode else { return }
+        feedback = .thankYou
+    }
+
     func loadProducts(force: Bool = false) async {
         guard force || products.isEmpty else { return }
+        if Self.isDemoMode {
+            isLoading = false
+            errorMessage = nil
+            return
+        }
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }

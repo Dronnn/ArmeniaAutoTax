@@ -17,3 +17,6 @@ README_RU.md
 docs/
 logs/
 build_project.py
+
+# Local App Store submission package (not part of the public source)
+AppStore/

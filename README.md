@@ -47,6 +47,7 @@ The app is fully on-device. There is no account, no backend, no advertising and 
 
 - Xcode 16 or newer
 - iOS 17 or newer
+- iPhone (the app is designed for iPhone; iPad runs it in compatibility mode)
 - No CocoaPods, Carthage, Swift Package dependencies, server, account or API key
 
 ## Run the app

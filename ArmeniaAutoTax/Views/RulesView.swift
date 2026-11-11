@@ -20,6 +20,8 @@ struct RulesView: View {
         .background(Palette.background)
         .navigationTitle(t("rules.title"))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Palette.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 
     private var ratesCard: some View {

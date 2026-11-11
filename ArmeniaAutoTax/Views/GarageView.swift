@@ -47,6 +47,8 @@ struct GarageView: View {
         .background(Palette.background)
         .navigationTitle(t("garage.title"))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Palette.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -73,11 +75,7 @@ struct GarageView: View {
                         .background(Palette.accent.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
                     VStack(alignment: .leading, spacing: 5) {
                         Text(car.localizedDisplayName(language: store.language)).font(.headline)
-                        Text(f("garage.car.subtitle",
-                               car.manufactureYear,
-                               car.horsepower,
-                               t("common.hp"),
-                               car.category.localizedShortTitle(language: store.language)))
+                        Text(verbatim: "\(car.manufactureYear) · \(car.horsepower) \(t("common.hp")) · \(car.category.localizedShortTitle(language: store.language))")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()

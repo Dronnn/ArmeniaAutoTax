@@ -8,6 +8,18 @@ struct DonationView: View {
     @State private var selectedTierID = DonationTier.all[1].id
     @State private var didRequestProducts = false
 
+    init(language: AppLanguage) {
+        self.language = language
+        #if DEBUG
+        if let suffix = LaunchOptions.value(after: "-donation-tier"),
+           let tier = DonationTier.all.first(where: {
+               $0.id == suffix || $0.id.hasSuffix("." + suffix)
+           }) {
+            _selectedTierID = State(initialValue: tier.id)
+        }
+        #endif
+    }
+
     private var selectedTier: DonationTier {
         DonationTier.all.first { $0.id == selectedTierID } ?? DonationTier.all[1]
     }
@@ -34,6 +46,8 @@ struct DonationView: View {
         }
         .navigationTitle(t("donations.title"))
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Palette.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
             if store.feedback != .thankYou {
                 donateButton
@@ -46,6 +60,13 @@ struct DonationView: View {
             guard !didRequestProducts else { return }
             didRequestProducts = true
             await store.loadProducts()
+        }
+        .onAppear {
+            #if DEBUG
+            if LaunchOptions.arguments.contains("-demo-donation-thankyou") {
+                store.demoPurchase()
+            }
+            #endif
         }
         .onDisappear { store.clearFeedback() }
     }
@@ -88,7 +109,9 @@ struct DonationView: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
-            } else if let errorMessage = store.errorMessage, store.products.isEmpty {
+            } else if !DonationStore.isDemoMode,
+                      let errorMessage = store.errorMessage,
+                      store.products.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(errorMessage)
                         .font(.footnote)
@@ -142,6 +165,10 @@ struct DonationView: View {
 
     private var donateButton: some View {
         Button {
+            if DonationStore.isDemoMode {
+                store.demoPurchase()
+                return
+            }
             guard let selectedProduct else { return }
             Task { await store.purchase(selectedProduct) }
         } label: {
@@ -155,34 +182,40 @@ struct DonationView: View {
         }
         .buttonStyle(.borderedProminent)
         .tint(Palette.accent)
-        .disabled(selectedProduct == nil || store.purchasingProductID != nil)
+        .disabled((!DonationStore.isDemoMode && selectedProduct == nil) ||
+                  store.purchasingProductID != nil)
         .accessibilityIdentifier("donations.donate")
     }
 
     private func tierCard(_ tier: DonationTier) -> some View {
         let selected = selectedTierID == tier.id
-        let available = store.product(for: tier) != nil
+        let available = store.isAvailable(tier)
         return Button {
             selectedTierID = tier.id
         } label: {
-            VStack(alignment: .leading, spacing: 5) {
-                HStack(spacing: 4) {
+            HStack(spacing: 10) {
+                Image(systemName: tier.icon)
+                    .font(.title3)
+                    .foregroundStyle(selected ? Palette.accent : .secondary)
+                    .frame(width: 28)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 5) {
                     Text(store.displayName(for: tier, language: language))
                         .font(.caption.weight(.medium))
                         .foregroundStyle(selected ? Palette.accent : .secondary)
                         .lineLimit(1)
-                    Spacer(minLength: 0)
-                    if selected {
-                        Image(systemName: "checkmark")
-                            .font(.caption2.bold())
-                            .foregroundStyle(Palette.accent)
-                    }
+                    Text(store.displayPrice(for: tier))
+                        .font(.title3.bold())
+                        .foregroundStyle(.primary)
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(1)
                 }
-                Text(store.displayPrice(for: tier))
-                    .font(.title3.bold())
-                    .foregroundStyle(.primary)
-                    .minimumScaleFactor(0.7)
-                    .lineLimit(1)
+                Spacer(minLength: 0)
+                if selected {
+                    Image(systemName: "checkmark")
+                        .font(.caption2.bold())
+                        .foregroundStyle(Palette.accent)
+                }
             }
             .padding(14)
             .frame(maxWidth: .infinity, minHeight: 76, alignment: .leading)

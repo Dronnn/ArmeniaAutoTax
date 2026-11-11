@@ -10,6 +10,7 @@ final class DonationTests: XCTestCase {
         for tier in DonationTier.all {
             XCTAssertTrue(tier.id.hasPrefix("com.mrmaier.armeniaautotax.tip."))
             XCTAssertFalse(tier.fallbackPrice.isEmpty)
+            XCTAssertFalse(tier.icon.isEmpty)
             for language in AppLanguage.allCases {
                 XCTAssertFalse(L10n.string(tier.nameKey, language: language).isEmpty)
             }
@@ -75,7 +76,8 @@ final class DonationTests: XCTestCase {
         XCTAssertNil(store.product(for: DonationTier(
             id: "com.mrmaier.armeniaautotax.tip.unknown",
             nameKey: "donations.tier.small",
-            fallbackPrice: "$0.00"
+            fallbackPrice: "$0.00",
+            icon: "questionmark.circle"
         )))
     }
 }

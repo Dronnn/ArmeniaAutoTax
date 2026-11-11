@@ -56,6 +56,7 @@ struct TaxChartsView: View {
                 }
             }
         }
+        .id("charts.power")
         VStack(alignment: .leading, spacing: 12) {
             SectionHeader(kicker: t("charts.years.kicker"),
                           title: t("charts.years.title"),
@@ -76,6 +77,17 @@ struct TaxChartsView: View {
                             .symbolSize(56)
                     }
                     .chartXScale(domain: 2026...2030)
+                    .chartXAxis {
+                        AxisMarks(values: [2026, 2027, 2028, 2029, 2030]) { value in
+                            AxisGridLine()
+                            AxisTick()
+                            AxisValueLabel {
+                                if let year = value.as(Int.self) {
+                                    Text(verbatim: String(year))
+                                }
+                            }
+                        }
+                    }
                     .frame(height: 210)
                     ForEach(years) { item in
                         MetricRow(label: String(item.year), value: MoneyText.amount(item.annualTax, digits: 0))
@@ -83,6 +95,7 @@ struct TaxChartsView: View {
                 }
             }
         }
+        .id("charts.age")
     }
 
     private func t(_ key: String) -> String {
