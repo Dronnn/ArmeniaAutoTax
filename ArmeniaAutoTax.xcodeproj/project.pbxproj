@@ -37,6 +37,11 @@
 		D0BA2AB02DC2F9A4EFF69C35 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6B8B5CB6FEF6FB621706E9 /* LocalizationTests.swift */; };
 		DB15704B6D0227C0C3ADB492 /* AppStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F636D03A890E0AD9578D458 /* AppStoreTests.swift */; };
 		EC825F05AA22D34DE49FB852 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B60E15C52A07684856E14C7 /* LaunchScreen.storyboard */; };
+		F1E2D3C4B5A6000000000002 /* TaxSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A6000000000001 /* TaxSchedule.swift */; };
+		F1E2D3C4B5A6000000000004 /* TaxRatesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A6000000000003 /* TaxRatesStore.swift */; };
+		F1E2D3C4B5A6000000000006 /* TaxRatesEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A6000000000005 /* TaxRatesEditorView.swift */; };
+		F1E2D3C4B5A6000000000008 /* TaxScheduleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A6000000000007 /* TaxScheduleTests.swift */; };
+		F1E2D3C4B5A600000000000A /* TaxRatesStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A6000000000009 /* TaxRatesStoreTests.swift */; };
 		FF98B10B2D8802B615CD4CFF /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2BFF6CE53237C58E1DF14C /* DesignSystem.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +94,11 @@
 		E54CB00D5F3E2DB716184966 /* GarageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GarageView.swift; sourceTree = "<group>"; };
 		E94AC592A91D7C8046D683CB /* ExchangeRatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRatesTests.swift; sourceTree = "<group>"; };
 		EFC2738362A33DCF6E0E35C6 /* ArmeniaAutoTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArmeniaAutoTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1E2D3C4B5A6000000000001 /* TaxSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxSchedule.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A6000000000003 /* TaxRatesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxRatesStore.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A6000000000005 /* TaxRatesEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxRatesEditorView.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A6000000000007 /* TaxScheduleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxScheduleTests.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A6000000000009 /* TaxRatesStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaxRatesStoreTests.swift; sourceTree = "<group>"; };
 		F20F1881412E439B3AE600A4 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		F2BAE668DCF206EE11265E34 /* DonationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationView.swift; sourceTree = "<group>"; };
 		F45A5E3E4DA1569C8627E7F5 /* DonationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationStore.swift; sourceTree = "<group>"; };
@@ -135,6 +145,7 @@
 		0FC23D5B493A7A7F80A2C311 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				F1E2D3C4B5A6000000000001 /* TaxSchedule.swift */,
 				B850770CCF6B9CDCECAC83F5 /* Vehicle.swift */,
 				FDB45120BBD80CC6B24B79BF /* TaxCalculator.swift */,
 				49E4B2535D811828A3A55500 /* TaxChartData.swift */,
@@ -145,6 +156,7 @@
 		1EA7F7404564F84F43BEB8EE /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F1E2D3C4B5A6000000000003 /* TaxRatesStore.swift */,
 				F20F1881412E439B3AE600A4 /* Localization.swift */,
 				90E9E26989397B826BFD5EAE /* Formatting.swift */,
 				6D99D0356EC6B259F389396A /* ExchangeRates.swift */,
@@ -175,6 +187,7 @@
 		6ADCA75F08E0336AB68FACF5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F1E2D3C4B5A6000000000005 /* TaxRatesEditorView.swift */,
 				BB2BFF6CE53237C58E1DF14C /* DesignSystem.swift */,
 				3D1FA95ABAF1C52C16932731 /* CalculatorView.swift */,
 				5626BC4E5A70F7B5EDFF2D14 /* ConverterView.swift */,
@@ -201,6 +214,8 @@
 		8AFCB912BBD56E8D3F0CA941 /* iOSTests */ = {
 			isa = PBXGroup;
 			children = (
+				F1E2D3C4B5A6000000000007 /* TaxScheduleTests.swift */,
+				F1E2D3C4B5A6000000000009 /* TaxRatesStoreTests.swift */,
 				868A1A434EFAA93945768AF7 /* TaxCalculationTests.swift */,
 				BE6B42101B0429173591B88D /* TaxCalculatorEdgeTests.swift */,
 				5D5491F7FE702DFE91AF2065 /* TaxChartDataTests.swift */,
@@ -382,6 +397,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1E2D3C4B5A6000000000008 /* TaxScheduleTests.swift in Sources */,
+				F1E2D3C4B5A600000000000A /* TaxRatesStoreTests.swift in Sources */,
 				08D4CFAECB6DA1C4B68E4536 /* TaxCalculationTests.swift in Sources */,
 				852869DA51C3F996DBD6024F /* TaxCalculatorEdgeTests.swift in Sources */,
 				B0CBCFABB18523C8CF4C55AF /* TaxChartDataTests.swift in Sources */,
@@ -405,6 +422,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1E2D3C4B5A6000000000002 /* TaxSchedule.swift in Sources */,
+				F1E2D3C4B5A6000000000004 /* TaxRatesStore.swift in Sources */,
+				F1E2D3C4B5A6000000000006 /* TaxRatesEditorView.swift in Sources */,
 				B188BBD29EB44B63DA097307 /* ArmeniaAutoTaxApp.swift in Sources */,
 				90DE282ADFEE31E42820E9C1 /* Vehicle.swift in Sources */,
 				81D2EE715875ACA374007ECC /* TaxCalculator.swift in Sources */,
@@ -455,9 +475,11 @@
 				ENABLE_TESTABILITY = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Armenia Auto Tax";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax;
@@ -465,12 +487,11 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -505,7 +526,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ArmeniaAutoTax.app/ArmeniaAutoTax";
 			};
 			name = Release;
@@ -528,7 +549,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ArmeniaAutoTax.app/ArmeniaAutoTax";
 			};
 			name = Debug;
@@ -561,7 +582,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = ArmeniaAutoTax;
 			};
 			name = Release;
@@ -583,7 +604,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = ArmeniaAutoTax;
 			};
 			name = Debug;
@@ -600,9 +621,11 @@
 				DEVELOPMENT_TEAM = FP287HDXWV;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Armenia Auto Tax";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mrmaier.armeniaautotax;
@@ -610,11 +633,10 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

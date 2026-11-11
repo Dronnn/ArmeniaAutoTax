@@ -12,7 +12,7 @@ final class TaxCalculatorTests: XCTestCase {
     }
 
     func testPassengerBoundariesFromOriginalWebsite() {
-        let cases: [(Int, Double)] = [
+        let cases: [(Double, Double)] = [
             (120, 12_000), (121, 18_150), (150, 22_500),
             (151, 23_150), (200, 55_000), (243, 82_950),
             (250, 87_500), (251, 113_250), (272, 129_000), (300, 150_000)

@@ -1,54 +1,76 @@
 import Foundation
 
-/// Republic of Armenia vehicle property tax, Tax Code Articles 242–248.
+/// Republic of Armenia vehicle property tax, Tax Code Articles 242-248.
 ///
-/// The reference site uses the 2026 rules. Forecasts for later years hold the
-/// same rates constant, changing only the age-related reduction.
+/// All rates, bands, age rules and the EV power rule come from a
+/// `TaxRateSchedule`. The 2026 schedule is verified; later years are
+/// projected until a future version ships a verified schedule.
 public enum TaxCalculator {
-    public static let referenceYear = 2026
+    public static let referenceYear = TaxScheduleStore.referenceYear
 
     public static func calculate(_ vehicle: Vehicle, year: Int = referenceYear) -> TaxBreakdown {
-        let power = max(0, vehicle.horsepower)
-        let age = max(0, year - vehicle.manufactureYear)
-        let months = min(12, max(1, vehicle.taxableMonths))
-        let communityPercent = min(10, max(0, vehicle.communitySurchargePercent))
-        let rate: Int
-        let extraHorsepower: Int
+        calculate(vehicle, year: year, schedule: TaxScheduleStore.schedule(for: year))
+    }
 
-        switch vehicle.category {
-        case .passenger:
-            rate = power <= 120 ? 200 : (power <= 250 ? 300 : 500)
-            extraHorsepower = max(0, power - 150)
-        case .bus, .cargo:
-            rate = power <= 200 ? 100 : 200
-            extraHorsepower = 0
-        case .motorcycle:
-            rate = 40
-            extraHorsepower = 0
-        case .other:
-            rate = 150
+    public static func calculate(
+        _ vehicle: Vehicle,
+        year: Int,
+        schedule: TaxRateSchedule
+    ) -> TaxBreakdown {
+        let rawPower = sanitized(vehicle.horsepower)
+        let taxablePower = taxablePower(for: vehicle, schedule: schedule)
+        let band = schedule.band(for: taxablePower, category: vehicle.category)
+        let rate = band.ratePerHorsepower
+        let base = taxablePower * Double(rate)
+
+        let extraAbove = band.extraAbove
+        let extraRate = band.extraPerHorsepower ?? 0
+        let extraHorsepower: Double
+        if let extraAbove, extraRate > 0 {
+            extraHorsepower = max(0, taxablePower - extraAbove)
+        } else {
             extraHorsepower = 0
         }
-
-        let base = Double(power * rate)
-        let extra = Double(extraHorsepower * 1_000)
+        let extra = extraHorsepower * Double(extraRate)
         let subtotal = base + extra
-        let discount = vehicle.category.isRoadMotorVehicle
-            ? min(50, max(0, (age - 2) * 10)) : 0
-        let exempt = vehicle.category == .cargo && age >= 20
+
+        let age = max(0, year - vehicle.manufactureYear)
+        let discount: Int
+        if vehicle.category.isRoadMotorVehicle {
+            let steps = max(0, age - schedule.fullTaxYears + 1)
+            let maximumDiscount = max(0, min(100, schedule.maxDiscount))
+            discount = max(0, min(maximumDiscount, steps * schedule.discountStep))
+        } else {
+            discount = 0
+        }
+
+        let exempt = vehicle.category == .cargo && age >= schedule.cargoExemptionAge
         let discountAmount = exempt ? 0 : subtotal * Double(discount) / 100
         let discounted = exempt ? 0 : subtotal - discountAmount
-        // Rate increases authorized by the municipality are applied to the
-        // amount after the age reduction, preserving the same effective rate.
+
+        let maximumCommunityPercent = max(0, min(100, schedule.communityMaxPercent))
+        let communityPercent = max(0, min(maximumCommunityPercent, vehicle.communitySurchargePercent))
         let surcharge = discounted * Double(communityPercent) / 100
-        let annual = discounted + surcharge
-        let period = annual * Double(months) / 12
+        let annualTotal = discounted + surcharge
+        let months = min(12, max(0, vehicle.taxableMonths))
+        let periodTotal = annualTotal * Double(months) / 12
+
+        let adjusted = vehicle.powerSource.appliesEVRule
+            && schedule.evPowerRule.isEnabled
+            && rawPower > 0
+            && abs(taxablePower - rawPower) > 0.000_000_1
 
         return TaxBreakdown(
             calculationYear: year,
             age: age,
+            rawHorsepower: rawPower,
+            taxableHorsepower: taxablePower,
+            isElectricAdjusted: adjusted,
+            powerSource: vehicle.powerSource,
             baseRatePerHorsepower: rate,
             baseAmount: base,
+            extraAboveHorsepower: extraAbove,
+            extraRatePerHorsepower: band.extraPerHorsepower,
             extraHorsepower: extraHorsepower,
             extraAmount: extra,
             subtotal: subtotal,
@@ -56,10 +78,33 @@ public enum TaxCalculator {
             ageDiscountAmount: discountAmount,
             surchargePercent: communityPercent,
             surchargeAmount: surcharge,
-            annualTotal: annual,
+            annualTotal: annualTotal,
             taxableMonths: months,
-            periodTotal: period,
-            isExempt: exempt
+            periodTotal: periodTotal,
+            isExempt: exempt,
+            rateStatus: schedule.status
         )
+    }
+
+    /// Power actually used for the Article 244 bands.
+    public static func taxablePower(for vehicle: Vehicle, schedule: TaxRateSchedule) -> Double {
+        let rawPower = sanitized(vehicle.horsepower)
+        guard vehicle.powerSource.appliesEVRule else { return rawPower }
+        return sanitized(schedule.evPowerRule.taxablePower(from: rawPower))
+    }
+
+    /// Inverse of `taxablePower(for:)`, used by charts to keep the statutory
+    /// thresholds on the taxable-power axis.
+    public static func rawPower(
+        forTaxable taxablePower: Double,
+        vehicle: Vehicle,
+        schedule: TaxRateSchedule
+    ) -> Double {
+        guard vehicle.powerSource.appliesEVRule else { return sanitized(taxablePower) }
+        return sanitized(schedule.evPowerRule.rawPower(forTaxable: taxablePower))
+    }
+
+    private static func sanitized(_ value: Double) -> Double {
+        value.isFinite ? max(0, value) : 0
     }
 }

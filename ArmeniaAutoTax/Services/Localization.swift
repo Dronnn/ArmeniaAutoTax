@@ -116,10 +116,29 @@ extension VehicleCategory {
     }
 }
 
+extension VehiclePowerSource {
+    func localizedTitle(language: AppLanguage = .selected) -> String {
+        switch self {
+        case .fuel: L10n.string("powerSource.fuel", language: language)
+        case .electricPassport: L10n.string("powerSource.electricPassport", language: language)
+        case .electricRaw: L10n.string("powerSource.electricRaw", language: language)
+        }
+    }
+
+    func localizedNote(language: AppLanguage = .selected) -> String? {
+        switch self {
+        case .fuel: nil
+        case .electricPassport: L10n.string("calculator.powerSource.evPassportNote", language: language)
+        case .electricRaw: L10n.string("calculator.powerSource.evRawNote", language: language)
+        }
+    }
+}
+
 extension Vehicle {
     func localizedDisplayName(language: AppLanguage = .selected) -> String {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.isEmpty else { return trimmed }
-        return "\(category.localizedShortTitle(language: language)) · \(horsepower) \(L10n.string("common.hp", language: language))"
+        let power = MoneyText.number(horsepower, digits: 2, locale: language.locale)
+        return "\(category.localizedShortTitle(language: language)) · \(power) \(L10n.string("common.hp", language: language))"
     }
 }

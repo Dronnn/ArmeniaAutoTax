@@ -4,6 +4,7 @@ import UIKit
 
 struct GarageView: View {
     @ObservedObject var store: AppStore
+    @ObservedObject var taxRates: TaxRatesStore
     let onSelect: (Vehicle) -> Void
     @State private var shareURL: URL?
     @State private var showingShare = false
@@ -65,7 +66,8 @@ struct GarageView: View {
     }
 
     private func carCard(_ car: Vehicle) -> some View {
-        SurfaceCard {
+        let tax = calculation(for: car)
+        return SurfaceCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: car.category.symbol)
@@ -75,7 +77,7 @@ struct GarageView: View {
                         .background(Palette.accent.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
                     VStack(alignment: .leading, spacing: 5) {
                         Text(car.localizedDisplayName(language: store.language)).font(.headline)
-                        Text(verbatim: "\(car.manufactureYear) · \(car.horsepower) \(t("common.hp")) · \(car.category.localizedShortTitle(language: store.language))")
+                        Text(verbatim: "\(car.manufactureYear) · \(MoneyText.number(car.horsepower, digits: 2)) \(t("common.hp")) · \(car.category.localizedShortTitle(language: store.language))")
                             .font(.caption).foregroundStyle(.secondary)
                     }
                     Spacer()
@@ -85,9 +87,12 @@ struct GarageView: View {
                     .accessibilityLabel(f("garage.delete.a11y", car.localizedDisplayName(language: store.language)))
                     .accessibilityIdentifier("garage.delete")
                 }
-                HStack {
-                    Text(MoneyText.amount(TaxCalculator.calculate(car).periodTotal))
+                HStack(alignment: .firstTextBaseline) {
+                    Text(MoneyText.amount(tax.periodTotal))
                         .font(.title3.bold()).monospacedDigit()
+                    Text(f("garage.taxYear", String(tax.calculationYear)))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                     Spacer()
                     Button(t("garage.open")) { onSelect(car) }
                         .buttonStyle(.bordered).tint(Palette.accent)
@@ -98,18 +103,26 @@ struct GarageView: View {
         }
     }
 
+    private func calculation(for car: Vehicle) -> TaxBreakdown {
+        TaxCalculator.calculate(
+            car,
+            year: store.taxYear,
+            schedule: taxRates.schedule(for: store.taxYear)
+        )
+    }
+
     private var comparisonChart: some View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(kicker: t("garage.compare.kicker"), title: t("garage.compare.title"))
             SurfaceCard {
                 Chart(store.garage) { car in
                     BarMark(
-                        x: .value(t("charts.y.tax"), TaxCalculator.calculate(car).periodTotal),
+                        x: .value(t("charts.y.tax"), calculation(for: car).periodTotal),
                         y: .value(t("garage.title"), car.localizedDisplayName(language: store.language))
                     )
                     .foregroundStyle(Palette.accent)
                     .annotation(position: .trailing) {
-                        Text(MoneyText.number(TaxCalculator.calculate(car).periodTotal, digits: 0))
+                        Text(MoneyText.number(calculation(for: car).periodTotal, digits: 0))
                             .font(.caption2).foregroundStyle(.secondary)
                     }
                 }
@@ -129,7 +142,7 @@ struct GarageView: View {
                             .locale(store.language.locale)
                     ))
                     .font(.caption2).foregroundStyle(.secondary)
-                    Text(MoneyText.amount(entry.tax.periodTotal))
+                    Text("\(MoneyText.amount(entry.tax.periodTotal)) · \(f("garage.taxYear", String(entry.tax.calculationYear)))")
                         .font(.subheadline.weight(.semibold)).monospacedDigit()
                 }
                 Spacer()

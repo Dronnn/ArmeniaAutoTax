@@ -33,6 +33,7 @@ final class AppStore: ObservableObject {
     static let onboardingKey = "app.onboarding.completed"
 
     @Published var draft: Vehicle { didSet { persist() } }
+    @Published var taxYear: Int { didSet { persist() } }
     @Published private(set) var garage: [Vehicle]
     @Published private(set) var history: [TaxHistoryEntry]
     @Published var appearance: AppAppearance {
@@ -48,7 +49,11 @@ final class AppStore: ObservableObject {
     private let storageURL: URL
     private let defaults: UserDefaults
 
-    init(storageURL: URL? = nil, defaults: UserDefaults = .standard) {
+    init(
+        storageURL: URL? = nil,
+        defaults: UserDefaults = .standard,
+        currentTaxYear: Int = TaxScheduleStore.currentTaxYear()
+    ) {
         let arguments = ProcessInfo.processInfo.arguments
         let isUITesting = arguments.contains("-ui-testing")
         let testDefaults = isUITesting
@@ -74,6 +79,7 @@ final class AppStore: ObservableObject {
         let persisted = try? Data(contentsOf: self.storageURL)
         let document = persisted.flatMap { try? JSONDecoder().decode(PersistentDocument.self, from: $0) }
         draft = document?.draft ?? Vehicle()
+        taxYear = TaxScheduleStore.clampedYear(document?.taxYear ?? currentTaxYear)
         garage = document?.garage ?? []
         history = document?.history ?? []
         appearance = AppAppearance(rawValue: testDefaults.string(forKey: Self.appearanceKey) ?? "system") ?? .system
@@ -99,8 +105,8 @@ final class AppStore: ObservableObject {
         draft = camry
         garage = [camry, x5, transit]
         history = [
-            TaxHistoryEntry(vehicle: x5, tax: TaxCalculator.calculate(x5)),
-            TaxHistoryEntry(vehicle: transit, tax: TaxCalculator.calculate(transit))
+            TaxHistoryEntry(vehicle: x5, tax: TaxCalculator.calculate(x5, year: taxYear)),
+            TaxHistoryEntry(vehicle: transit, tax: TaxCalculator.calculate(transit, year: taxYear))
         ]
         if LaunchOptions.arguments.contains("-demo-forecast") {
             let forecastCar = Vehicle(name: "Toyota Camry", manufactureYear: 2023, horsepower: 243)
@@ -111,7 +117,7 @@ final class AppStore: ObservableObject {
     }
     #endif
 
-    var calculation: TaxBreakdown { TaxCalculator.calculate(draft) }
+    var calculation: TaxBreakdown { TaxCalculator.calculate(draft, year: taxYear) }
 
     func saveVehicle() {
         guard validDraft else { return }
@@ -133,12 +139,12 @@ final class AppStore: ObservableObject {
 
     var validDraft: Bool {
         draft.horsepower > 0 && draft.horsepower <= 10_000 &&
-        (1900...TaxCalculator.referenceYear).contains(draft.manufactureYear)
+        (1900...taxYear).contains(draft.manufactureYear)
     }
 
-    func recordCalculation() {
+    func recordCalculation(_ tax: TaxBreakdown? = nil) {
         guard validDraft else { return }
-        history.insert(TaxHistoryEntry(vehicle: draft, tax: calculation), at: 0)
+        history.insert(TaxHistoryEntry(vehicle: draft, tax: tax ?? calculation), at: 0)
         // Keep storage bounded while preserving a useful local history.
         if history.count > 500 { history = Array(history.prefix(500)) }
         persist()
@@ -170,7 +176,7 @@ final class AppStore: ObservableObject {
     }
 
     private func persist() {
-        let doc = PersistentDocument(draft: draft, garage: garage, history: history)
+        let doc = PersistentDocument(draft: draft, garage: garage, history: history, taxYear: taxYear)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         guard let data = try? encoder.encode(doc) else { return }
@@ -195,6 +201,7 @@ final class AppStore: ObservableObject {
         defaults.removeObject(forKey: Self.onboardingKey)
         defaults.removeObject(forKey: Self.appearanceKey)
         defaults.removeObject(forKey: "armenianCarTax.exchangeRates.v1")
+        defaults.removeObject(forKey: TaxRatesStore.storageKey)
     }
 }
 
@@ -202,6 +209,7 @@ private struct PersistentDocument: Codable {
     var draft: Vehicle
     var garage: [Vehicle]
     var history: [TaxHistoryEntry]
+    var taxYear: Int?
 }
 
 /// Debug-only launch switches used by the screenshot and UI-test automation.

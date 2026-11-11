@@ -3,7 +3,7 @@ import XCTest
 
 final class TaxCalculatorEdgeTests: XCTestCase {
     func testPassengerRateBandsUseWholePower() {
-        let cases: [(Int, Int, Double)] = [
+        let cases: [(Double, Int, Double)] = [
             (1, 200, 200),
             (120, 200, 24_000),
             (121, 300, 36_300),
@@ -101,13 +101,13 @@ final class TaxCalculatorEdgeTests: XCTestCase {
             taxableMonths: -5,
             communitySurchargePercent: -5
         ))
-        XCTAssertEqual(low.taxableMonths, 1)
+        XCTAssertEqual(low.taxableMonths, 0)
         XCTAssertEqual(low.surchargePercent, 0)
-        XCTAssertEqual(low.periodTotal, 6_912.5)
+        XCTAssertEqual(low.periodTotal, 0)
     }
 
     func testNegativeAndZeroPower() {
-        for power in [-100, 0] {
+        for power in [-100.0, 0.0] {
             let result = TaxCalculator.calculate(Vehicle(manufactureYear: 2019, horsepower: power))
             XCTAssertEqual(result.baseAmount, 0)
             XCTAssertEqual(result.subtotal, 0)

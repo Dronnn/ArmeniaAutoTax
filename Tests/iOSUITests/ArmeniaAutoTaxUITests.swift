@@ -167,4 +167,201 @@ final class ArmeniaAutoTaxUITests: XCTestCase {
         continueButton.tap()
         XCTAssertTrue(tab("Калькулятор").waitForExistence(timeout: 10))
     }
+
+    private func replaceText(_ field: XCUIElement, with text: String, deleteCount: Int = 12) {
+        field.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: deleteCount))
+        field.typeText(text)
+    }
+
+    private func dismissKeyboard() {
+        let toolbarOK = app.toolbars.buttons["OK"].firstMatch
+        if toolbarOK.waitForExistence(timeout: 1) {
+            toolbarOK.tap()
+            return
+        }
+        let ok = app.buttons["OK"].firstMatch
+        if ok.exists { ok.tap() }
+    }
+
+    private func choose(_ picker: XCUIElement, option: String) {
+        XCTAssertTrue(picker.waitForExistence(timeout: 5))
+        dismissKeyboard()
+        for _ in 0..<3 {
+            picker.tap()
+            let item = app.buttons[option].firstMatch
+            if item.waitForExistence(timeout: 3) {
+                item.tap()
+                return
+            }
+        }
+        XCTFail("Missing menu option \(option)")
+    }
+
+    func testOwnershipDatesSheetOpensAndApplies() {
+        launch()
+
+        let advanced = app.buttons["Additional parameters"]
+        scrollTo(advanced)
+        XCTAssertTrue(advanced.waitForExistence(timeout: 5))
+        advanced.tap()
+
+        let dates = app.buttons["calculator.monthsFromDates"]
+        scrollTo(dates)
+        XCTAssertTrue(dates.waitForExistence(timeout: 5))
+        dates.tap()
+
+        XCTAssertTrue(app.navigationBars["Ownership period"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts.containing(
+            NSPredicate(format: "label CONTAINS 'Liability months: 12'")
+        ).firstMatch.waitForExistence(timeout: 5))
+
+        let apply = app.buttons["months.apply"]
+        XCTAssertTrue(apply.waitForExistence(timeout: 5))
+        apply.tap()
+
+        XCTAssertTrue(app.navigationBars["Ownership period"].waitForNonExistence(timeout: 5))
+    }
+
+    func testKilowattInputConvertsToHorsepower() {
+        launch()
+        let horsepower = app.textFields["calculator.horsepower"]
+        XCTAssertTrue(horsepower.waitForExistence(timeout: 10))
+
+        choose(app.buttons["calculator.powerUnit"], option: "kW")
+        replaceText(horsepower, with: "100")
+
+        let amount = app.staticTexts["calculator.result.amount"]
+        expectation(for: NSPredicate(format: "label CONTAINS '20,400'"), evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+    }
+
+    func testElectricVehicleRawPowerUsesThe2026Rule() {
+        launch()
+        let year = app.textFields["calculator.year"]
+        XCTAssertTrue(year.waitForExistence(timeout: 10))
+        replaceText(year, with: "2025")
+
+        let horsepower = app.textFields["calculator.horsepower"]
+        XCTAssertTrue(horsepower.waitForExistence(timeout: 10))
+        replaceText(horsepower, with: "544")
+
+        choose(app.buttons["calculator.powerSource"], option: "Electric · raw motor power")
+
+        let amount = app.staticTexts["calculator.result.amount"]
+        let predicate = NSPredicate(format: "label CONTAINS '276,400'")
+        expectation(for: predicate, evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+
+        let taxable = app.staticTexts["calculator.result.taxablePower"]
+        XCTAssertTrue(taxable.exists)
+        XCTAssertTrue(taxable.label.contains("284"))
+
+        choose(app.buttons["calculator.powerSource"], option: "Electric · e-passport power")
+        replaceText(horsepower, with: "250")
+        expectation(for: NSPredicate(format: "label CONTAINS '175,000'"), evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+        XCTAssertFalse(app.staticTexts["calculator.result.taxablePower"].exists)
+    }
+
+    func testTaxYearAdvancesTheAgeDiscount() {
+        launch()
+        let year = app.textFields["calculator.year"]
+        XCTAssertTrue(year.waitForExistence(timeout: 10))
+        replaceText(year, with: "2020")
+
+        let amount = app.staticTexts["calculator.result.amount"]
+        expectation(for: NSPredicate(format: "label CONTAINS '99,540'"), evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+
+        choose(app.buttons["calculator.taxYear"], option: "2027")
+
+        expectation(for: NSPredicate(format: "label CONTAINS '82,950'"), evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+        XCTAssertTrue(app.staticTexts.containing(
+            NSPredicate(format: "label CONTAINS 'projected'")
+        ).firstMatch.exists)
+    }
+
+    func testRateEditorDisablesSaveForInvalidValues() {
+        launch()
+        tab("Settings").tap()
+
+        let edit = app.buttons["Edit tax rates"]
+        scrollTo(edit)
+        XCTAssertTrue(edit.waitForExistence(timeout: 5))
+        edit.tap()
+
+        let rate = app.textFields["rates.passenger2Rate"]
+        XCTAssertTrue(rate.waitForExistence(timeout: 5))
+        rate.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        rate.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 12))
+
+        XCTAssertFalse(app.buttons["rates.save"].isEnabled)
+        XCTAssertTrue(app.staticTexts.containing(
+            NSPredicate(format: "label CONTAINS 'Check the values'")
+        ).firstMatch.exists)
+
+        app.navigationBars.buttons["Cancel"].tap()
+    }
+
+    func testRateEditorKeepsEditsWhenYearChangeIsCancelled() {
+        launch()
+        tab("Settings").tap()
+
+        let edit = app.buttons["Edit tax rates"]
+        scrollTo(edit)
+        XCTAssertTrue(edit.waitForExistence(timeout: 5))
+        edit.tap()
+
+        let rate = app.textFields["rates.passenger2Rate"]
+        XCTAssertTrue(rate.waitForExistence(timeout: 5))
+        replaceText(rate, with: "400")
+
+        choose(app.buttons["rates.year"], option: "2027")
+
+        let keep = app.alerts.buttons["Keep editing"].firstMatch
+        XCTAssertTrue(keep.waitForExistence(timeout: 5))
+        keep.tap()
+
+        XCTAssertEqual(rate.value as? String, "400")
+        app.navigationBars.buttons["Cancel"].tap()
+    }
+
+    func testCustomRateChangeAndReset() {
+        launch()
+        tab("Settings").tap()
+
+        let edit = app.buttons["Edit tax rates"]
+        scrollTo(edit)
+        XCTAssertTrue(edit.waitForExistence(timeout: 5))
+        edit.tap()
+
+        let rate = app.textFields["rates.passenger2Rate"]
+        XCTAssertTrue(rate.waitForExistence(timeout: 5))
+        replaceText(rate, with: "400")
+        app.buttons["rates.save"].tap()
+
+        tab("Calculator").tap()
+        let amount = app.staticTexts["calculator.result.amount"]
+        expectation(for: NSPredicate(format: "label CONTAINS '95,100'"), evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+        XCTAssertTrue(app.staticTexts.containing(
+            NSPredicate(format: "label CONTAINS 'Custom tax rates are active'")
+        ).firstMatch.exists)
+
+        tab("Settings").tap()
+        let reset = app.buttons["Reset all custom rates"]
+        scrollTo(reset)
+        XCTAssertTrue(reset.waitForExistence(timeout: 5))
+        reset.tap()
+        let confirm = app.alerts.buttons["Reset all custom rates"].firstMatch
+        if confirm.waitForExistence(timeout: 3) {
+            confirm.tap()
+        }
+
+        tab("Calculator").tap()
+        expectation(for: NSPredicate(format: "label CONTAINS '82,950'"), evaluatedWith: amount)
+        waitForExpectations(timeout: 5)
+    }
 }

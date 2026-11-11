@@ -3,22 +3,30 @@ import SwiftUI
 
 struct TaxChartsView: View {
     let vehicle: Vehicle
+    let year: Int
+    @ObservedObject var taxRates: TaxRatesStore
     let language: AppLanguage
 
+    private var schedule: TaxRateSchedule { taxRates.schedule(for: year) }
+
     private var points: [HorsepowerTaxPoint] {
-        TaxChartData.horsepowerPoints(for: vehicle)
+        TaxChartData.horsepowerPoints(for: vehicle, year: year, schedule: schedule)
     }
 
     private var years: [YearTaxPoint] {
-        TaxChartData.yearPoints(for: vehicle)
+        TaxChartData.yearPoints(for: vehicle) { taxRates.schedule(for: $0) }
     }
 
-    private var thresholdPair: (low: Int, high: Int)? {
+    private var thresholdPair: (low: Double, high: Double)? {
         TaxChartData.thresholdPair(for: vehicle.category)
     }
 
     private var thresholdDifference: Double? {
-        TaxChartData.thresholdDifference(for: vehicle)
+        TaxChartData.thresholdDifference(for: vehicle, year: year, schedule: schedule)
+    }
+
+    private var selectedTaxablePower: Double {
+        TaxCalculator.taxablePower(for: vehicle, schedule: schedule)
     }
 
     var body: some View {
@@ -31,27 +39,28 @@ struct TaxChartsView: View {
                     ScrollView(.horizontal) {
                         Chart(points) { item in
                             BarMark(
-                                x: .value(t("charts.x.hp"), String(item.horsepower)),
+                                x: .value(t("charts.x.hp"), horsepowerLabel(item.horsepower)),
                                 y: .value(t("charts.y.tax"), item.annualTax)
                             )
-                            .foregroundStyle(item.horsepower == vehicle.horsepower
-                                             ? Palette.accent
-                                             : Palette.accent.opacity(0.43))
+                            .foregroundStyle(isSelected(item) ? Palette.accent : Palette.accent.opacity(0.43))
                             .cornerRadius(4)
                         }
-                        .frame(width: max(550, CGFloat(points.count) * 60), height: 230)
+                        .frame(width: max(550, CGFloat(points.count) * 66), height: 230)
                     }
                     .scrollIndicators(.hidden)
                     if let thresholdPair, let thresholdDifference {
                         InlineMessage(
                             symbol: "chart.bar.xaxis",
-                            message: t("charts.power.note",
-                                       thresholdPair.low,
-                                       thresholdPair.high,
+                            message: f("charts.power.note",
+                                       MoneyText.number(thresholdPair.low),
+                                       MoneyText.number(thresholdPair.high),
                                        MoneyText.amount(thresholdDifference, digits: 0))
                         )
                     } else {
                         InlineMessage(symbol: "chart.bar.xaxis", message: t("charts.power.linear"))
+                    }
+                    if vehicle.powerSource.appliesEVRule {
+                        InlineMessage(symbol: "bolt.car", message: t("charts.power.evNote"))
                     }
                 }
             }
@@ -73,12 +82,12 @@ struct TaxChartsView: View {
                             .lineStyle(.init(lineWidth: 3))
                         PointMark(x: .value(t("charts.x.year"), item.year),
                                   y: .value(t("charts.y.tax"), item.annualTax))
-                            .foregroundStyle(Palette.accent)
+                            .foregroundStyle(statusColor(item.status))
                             .symbolSize(56)
                     }
-                    .chartXScale(domain: 2026...2030)
+                    .chartXScale(domain: TaxChartData.referenceYears.lowerBound...TaxChartData.referenceYears.upperBound)
                     .chartXAxis {
-                        AxisMarks(values: [2026, 2027, 2028, 2029, 2030]) { value in
+                        AxisMarks(values: Array(TaxChartData.referenceYears)) { value in
                             AxisGridLine()
                             AxisTick()
                             AxisValueLabel {
@@ -90,7 +99,7 @@ struct TaxChartsView: View {
                     }
                     .frame(height: 210)
                     ForEach(years) { item in
-                        MetricRow(label: String(item.year), value: MoneyText.amount(item.annualTax, digits: 0))
+                        yearRow(item)
                     }
                 }
             }
@@ -98,11 +107,44 @@ struct TaxChartsView: View {
         .id("charts.age")
     }
 
+    private func yearRow(_ item: YearTaxPoint) -> some View {
+        HStack(spacing: 8) {
+            Circle()
+                .fill(statusColor(item.status))
+                .frame(width: 7, height: 7)
+            Text(verbatim: "\(item.year)")
+            Text(t("rates.status.\(item.status.rawValue)"))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Spacer()
+            Text(MoneyText.amount(item.annualTax, digits: 0))
+                .fontWeight(.medium)
+                .monospacedDigit()
+        }
+        .font(.footnote)
+    }
+
+    private func isSelected(_ point: HorsepowerTaxPoint) -> Bool {
+        abs(point.horsepower - selectedTaxablePower) < 0.000_1
+    }
+
+    private func horsepowerLabel(_ value: Double) -> String {
+        MoneyText.number(value, digits: value.rounded() == value ? 0 : 2)
+    }
+
+    private func statusColor(_ status: TaxRateStatus) -> Color {
+        switch status {
+        case .verified: Palette.accent
+        case .projected: .orange
+        case .custom: .purple
+        }
+    }
+
     private func t(_ key: String) -> String {
         L10n.string(key, language: language)
     }
 
-    private func t(_ key: String, _ arguments: CVarArg...) -> String {
+    private func f(_ key: String, _ arguments: CVarArg...) -> String {
         String(format: t(key), locale: language.locale, arguments: arguments)
     }
 }

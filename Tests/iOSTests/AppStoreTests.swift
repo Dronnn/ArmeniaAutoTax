@@ -28,7 +28,7 @@ final class AppStoreTests: XCTestCase {
         suites.append(suite)
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         defaults.removePersistentDomain(forName: suite)
-        return (AppStore(storageURL: url, defaults: defaults), url, defaults)
+        return (AppStore(storageURL: url, defaults: defaults, currentTaxYear: 2026), url, defaults)
     }
 
     func testDefaultDraftMatchesTheReferenceExample() throws {
@@ -46,13 +46,13 @@ final class AppStoreTests: XCTestCase {
 
     func testDraftValidationBoundaries() throws {
         let (store, _, _) = try makeStore()
-        let valid: [(Int, Int)] = [(1900, 1), (2026, 10_000), (2019, 243)]
+        let valid: [(Int, Double)] = [(1900, 1), (2026, 10_000), (2019, 243)]
         for (year, horsepower) in valid {
             store.draft.manufactureYear = year
             store.draft.horsepower = horsepower
             XCTAssertTrue(store.validDraft, "\(year), \(horsepower)")
         }
-        let invalid: [(Int, Int)] = [(1899, 243), (2027, 243), (2019, 0), (2019, 10_001)]
+        let invalid: [(Int, Double)] = [(1899, 243), (2027, 243), (2019, 0), (2019, 10_001)]
         for (year, horsepower) in invalid {
             store.draft.manufactureYear = year
             store.draft.horsepower = horsepower
@@ -285,5 +285,131 @@ final class AppStoreTests: XCTestCase {
         store.saveVehicle()
         XCTAssertEqual(store.garage.count, 1)
         XCTAssertEqual(store.garage.first?.name, "Valid")
+    }
+
+    func testTaxYearDefaultsToTheInjectedCurrentYear() throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("AppStoreTaxYear-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        temporaryDirectories.append(directory)
+        let suite = "AppStoreTaxYear-\(UUID().uuidString)"
+        suites.append(suite)
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        let store = AppStore(
+            storageURL: directory.appendingPathComponent("library.json"),
+            defaults: defaults,
+            currentTaxYear: 2027
+        )
+        XCTAssertEqual(store.taxYear, 2027)
+        store.draft.manufactureYear = 2027
+        XCTAssertTrue(store.validDraft)
+    }
+
+    func testTaxYearPersistsAcrossStoreInstances() throws {
+        let (store, url, defaults) = try makeStore()
+        store.taxYear = 2028
+        store.draft.manufactureYear = 2028
+        store.saveVehicle()
+
+        let restored = AppStore(storageURL: url, defaults: defaults, currentTaxYear: 2026)
+        XCTAssertEqual(restored.taxYear, 2028)
+        XCTAssertEqual(restored.garage.first?.manufactureYear, 2028)
+        XCTAssertTrue(restored.validDraft)
+    }
+
+    func testTaxYearControlsTheAgeDiscount() throws {
+        let (store, _, _) = try makeStore()
+        store.draft = Vehicle(manufactureYear: 2020, horsepower: 243)
+
+        store.taxYear = 2026
+        XCTAssertEqual(store.calculation.annualTotal, 99_540)
+
+        store.taxYear = 2027
+        XCTAssertEqual(store.calculation.annualTotal, 82_950)
+        XCTAssertEqual(store.calculation.calculationYear, 2027)
+        XCTAssertEqual(store.calculation.rateStatus, .projected)
+    }
+
+    func testDraftValidationUsesTheSelectedTaxYear() throws {
+        let (store, _, _) = try makeStore()
+        store.draft = Vehicle(manufactureYear: 2027, horsepower: 150)
+
+        store.taxYear = 2026
+        XCTAssertFalse(store.validDraft)
+
+        store.taxYear = 2027
+        XCTAssertTrue(store.validDraft)
+    }
+
+    func testRecordCalculationAcceptsAnExplicitBreakdown() throws {
+        let (store, _, _) = try makeStore()
+        let customSchedule = TaxRateSchedule.projected(year: 2026)
+        let tax = TaxCalculator.calculate(store.draft, year: 2026, schedule: customSchedule)
+        store.recordCalculation(tax)
+
+        XCTAssertEqual(store.history.count, 1)
+        XCTAssertEqual(store.history.first?.tax, tax)
+    }
+
+    func testOldVehicleJSONWithoutPowerSourceDecodesAsFuel() throws {
+        let json = """
+        {
+          "id": "00000000-0000-0000-0000-000000000001",
+          "name": "Legacy",
+          "manufactureYear": 2019,
+          "horsepower": 243,
+          "category": "passenger",
+          "taxableMonths": 12,
+          "communitySurchargePercent": 0
+        }
+        """
+        let vehicle = try JSONDecoder().decode(Vehicle.self, from: Data(json.utf8))
+        XCTAssertEqual(vehicle.horsepower, 243)
+        XCTAssertEqual(vehicle.powerSource, .fuel)
+    }
+
+    func testOldPersistentDocumentWithoutTaxYearDecodes() throws {
+        let (store, url, defaults) = try makeStore()
+        store.draft = Vehicle(name: "Legacy")
+        store.saveVehicle()
+
+        let data = try Data(contentsOf: url)
+        var object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        object.removeValue(forKey: "taxYear")
+        let legacyData = try JSONSerialization.data(withJSONObject: object)
+        try legacyData.write(to: url)
+
+        let restored = AppStore(storageURL: url, defaults: defaults, currentTaxYear: 2026)
+        XCTAssertEqual(restored.taxYear, 2026)
+        XCTAssertEqual(restored.garage.first?.name, "Legacy")
+    }
+
+    func testOldTaxBreakdownWithoutNewFieldsDecodes() throws {
+        let json = """
+        {
+          "calculationYear": 2026,
+          "age": 7,
+          "baseRatePerHorsepower": 300,
+          "baseAmount": 72900,
+          "extraHorsepower": 93,
+          "extraAmount": 93000,
+          "subtotal": 165900,
+          "ageDiscountPercent": 50,
+          "ageDiscountAmount": 82950,
+          "surchargePercent": 0,
+          "surchargeAmount": 0,
+          "annualTotal": 82950,
+          "taxableMonths": 12,
+          "periodTotal": 82950,
+          "isExempt": false
+        }
+        """
+        let tax = try JSONDecoder().decode(TaxBreakdown.self, from: Data(json.utf8))
+        XCTAssertEqual(tax.periodTotal, 82_950)
+        XCTAssertEqual(tax.extraHorsepower, 93)
+        XCTAssertEqual(tax.rateStatus, .verified)
+        XCTAssertEqual(tax.powerSource, .fuel)
+        XCTAssertFalse(tax.isElectricAdjusted)
+        XCTAssertNil(tax.extraRatePerHorsepower)
     }
 }

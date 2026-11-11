@@ -10,7 +10,7 @@ final class AppTaxCalculationTests: XCTestCase {
     }
 
     func testCriticalThresholds() {
-        let expected: [(Int, Double)] = [
+        let expected: [(Double, Double)] = [
             (120, 12_000), (121, 18_150), (150, 22_500),
             (151, 23_150), (250, 87_500), (251, 113_250), (272, 129_000)
         ]

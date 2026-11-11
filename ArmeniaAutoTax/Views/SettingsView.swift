@@ -2,6 +2,10 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var store: AppStore
+    @ObservedObject var taxRates: TaxRatesStore
+    @State private var showResetRates = false
+
+    private var rateStatus: TaxRateStatus { taxRates.status(for: store.taxYear) }
 
     var body: some View {
         ScrollView {
@@ -38,6 +42,47 @@ struct SettingsView: View {
 
                 SurfaceCard {
                     VStack(alignment: .leading, spacing: 12) {
+                        Text(L10n.string("settings.rates.title"))
+                            .font(.headline)
+                        HStack {
+                            Text(verbatim: "\(store.taxYear)")
+                                .font(.subheadline.weight(.semibold))
+                            Text(L10n.string("rates.status.\(rateStatus.rawValue)"))
+                                .font(.caption2.weight(.bold))
+                                .padding(.horizontal, 8).padding(.vertical, 4)
+                                .background(Palette.accent.opacity(0.12), in: Capsule())
+                                .foregroundStyle(Palette.accent)
+                            Spacer()
+                        }
+                        if taxRates.hasCustomRates {
+                            Text(f("settings.rates.customYears",
+                                   taxRates.customYears.map(String.init).joined(separator: ", ")))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        NavigationLink(L10n.string("settings.rates.edit")) {
+                            TaxRatesEditorView(
+                                taxRates: taxRates,
+                                language: store.language,
+                                initialYear: store.taxYear
+                            )
+                        }
+                        .font(.footnote.weight(.semibold))
+                        .tint(Palette.accent)
+                        if taxRates.hasCustomRates {
+                            Button(L10n.string("settings.rates.reset"), role: .destructive) {
+                                showResetRates = true
+                            }
+                            .font(.footnote.weight(.semibold))
+                        }
+                        Text(L10n.string("settings.rates.note"))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                SurfaceCard {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text(L10n.string("settings.about.title"))
                             .font(.headline)
                         Text(L10n.string("settings.about.body"))
@@ -69,6 +114,23 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Palette.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .alert(
+            L10n.string("settings.rates.reset"),
+            isPresented: $showResetRates
+        ) {
+            Button(L10n.string("settings.rates.reset"), role: .destructive) {
+                taxRates.resetAll()
+            }
+            Button(L10n.string("common.cancel"), role: .cancel) {}
+        } message: {
+            Text(L10n.string("settings.rates.reset.confirm"))
+        }
+    }
+
+    private func f(_ key: String, _ arguments: CVarArg...) -> String {
+        String(format: L10n.string(key, language: store.language),
+               locale: store.language.locale,
+               arguments: arguments)
     }
 
     private func languageRow(_ language: AppLanguage) -> some View {

@@ -8,6 +8,7 @@ enum MainTab: Hashable {
 struct ArmeniaAutoTaxApp: App {
     @StateObject private var store = AppStore()
     @StateObject private var rates = ExchangeRatesStore()
+    @StateObject private var taxRates = TaxRatesStore()
     @State private var selectedTab: MainTab = .launchDefault
 
     var body: some Scene {
@@ -41,13 +42,13 @@ struct ArmeniaAutoTaxApp: App {
     private var mainTabs: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
-                CalculatorView(store: store, rates: rates)
+                CalculatorView(store: store, rates: rates, taxRates: taxRates)
             }
             .tabItem { Label(L10n.string("tab.calculator"), systemImage: "function") }
             .tag(MainTab.calculator)
 
             NavigationStack {
-                GarageView(store: store) { vehicle in
+                GarageView(store: store, taxRates: taxRates) { vehicle in
                     store.loadVehicle(vehicle)
                     selectedTab = .calculator
                 }
@@ -57,13 +58,13 @@ struct ArmeniaAutoTaxApp: App {
             .tag(MainTab.garage)
 
             NavigationStack {
-                RulesView(language: store.language)
+                RulesView(store: store, taxRates: taxRates)
             }
             .tabItem { Label(L10n.string("tab.rules"), systemImage: "text.book.closed") }
             .tag(MainTab.rules)
 
             NavigationStack {
-                SettingsView(store: store)
+                SettingsView(store: store, taxRates: taxRates)
             }
             .tabItem { Label(L10n.string("tab.settings"), systemImage: "gearshape.fill") }
             .tag(MainTab.settings)
