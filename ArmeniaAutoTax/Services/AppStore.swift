@@ -102,6 +102,11 @@ final class AppStore: ObservableObject {
             TaxHistoryEntry(vehicle: x5, tax: TaxCalculator.calculate(x5)),
             TaxHistoryEntry(vehicle: transit, tax: TaxCalculator.calculate(transit))
         ]
+        if LaunchOptions.arguments.contains("-demo-forecast") {
+            let forecastCar = Vehicle(name: "Toyota Camry", manufactureYear: 2023, horsepower: 243)
+            draft = forecastCar
+            garage[0] = forecastCar
+        }
         persist()
     }
     #endif
